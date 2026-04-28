@@ -1,0 +1,13 @@
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        k = 0
+        #use two pointers only swap when values != arrayy index 
+        #TC O(n) n is size of input array
+        for index in range(len(nums)):
+
+            if val != nums[index]:
+                nums[k] = nums[index]
+                k = k+1
+        
+        return k
+        

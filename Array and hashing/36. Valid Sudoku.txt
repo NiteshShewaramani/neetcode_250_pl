@@ -1,0 +1,38 @@
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        #Time O(9 x 9) Space O(9)
+        #going row by row
+        for r in range(9):
+            seen = [False]*9
+            for c in range(9):
+                if board[r][c] != ".":
+                    idx = ord(board[r][c]) - ord("1")
+                    if seen[idx]:
+                        return False
+                    seen[idx] = True
+
+        #going column by column
+        for c in range(9):
+            seen = [False]*9
+            for r in range(9):
+                if board[r][c] != ".":
+                    idx = ord(board[r][c]) - ord("1")
+                    if seen[idx]:
+                        return False
+                    seen[idx] = True
+
+        
+        #now checking all boxes
+
+        for i in range(0,9,3):
+            for j in range(0,9,3):
+                seen = [False]*9
+                for k in range(3):
+                    for l in range(3):
+                        if board[j+k][i+l] != ".":
+                            idx = ord(board[j+k][i+l]) - ord("1")
+                            if seen[idx]:
+                                return False
+                            seen[idx] = True
+
+        return True

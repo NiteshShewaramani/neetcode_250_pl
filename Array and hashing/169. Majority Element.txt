@@ -1,0 +1,23 @@
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        #time O(N) space O(1)
+        element = nums[0]
+        count = 1
+        index = 1
+        while index < len(nums):
+
+            # if nums[index] == element:
+            #     count += 1
+            # else:
+            #     count -= 1
+            # turnany operator similar to above
+            count += (1 if nums[index] == element else -1)
+            
+            if count == 0:
+                count = 1 
+                element = nums[index]
+
+            index +=1
+
+        
+        return element 

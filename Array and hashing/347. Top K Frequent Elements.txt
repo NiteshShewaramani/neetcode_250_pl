@@ -1,0 +1,23 @@
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        # TC O(n)
+        maxBucketLen = len(nums)
+        result = []
+        count = {} # hashmap
+        # plus 1 for handling 0
+        freq = [[] for i in range(maxBucketLen + 1) ]
+
+        for n in nums:
+            count[n] = 1 + count.get(n,0)
+        
+        # parse the map for key value pair
+        for n,c in count.items():
+            # for every c count , n appears 
+            # n appears c no of times
+            freq[c].append(n)
+
+        for i in range(len(freq) -1 , 0 , -1 ):
+            for n in freq[i]:
+                result.append(n)
+                if len(result) == k:
+                    return result

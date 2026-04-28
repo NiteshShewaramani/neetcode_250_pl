@@ -1,0 +1,28 @@
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        
+        if len(s) != len(t):
+            return False
+        
+        # creating a count hashmap here
+        countS , countT = {},{}
+
+        # iterate through 1 array
+        for i in range(len(s)):
+            # we are using get in case if key is empty 
+            # s[i] is character at index i
+            # countS[key] = assigning value to key 
+            countS[s[i]]  = 1 + countS.get(s[i] , 0)
+            countT[t[i]]  = 1 + countT.get(t[i] , 0)
+
+        # iterate through keys of a map
+        for c in countS:
+            # using get for countT in case key doesn't exist in map t 
+            # we are looping for keys in MAP s so key will exist there
+            if countS[c] != countT.get(c , 0):
+                return False
+
+        # TC O (S + T) s is size of array T is size of MAP
+        # SC O (size of both maps )
+        
+        return True

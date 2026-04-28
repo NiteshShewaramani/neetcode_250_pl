@@ -1,0 +1,17 @@
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+
+        hashMap = {} # value : index
+        # we are guranted from testcase that a solution exists
+        #time O(N) space O(N) - hashmap
+        for index in range(len(nums)):
+
+            value = nums[index]
+            key = target - value
+
+            # found the pair
+            if key in hashMap:
+                previousIndex = hashMap[key]
+                return [previousIndex,index]
+            
+            hashMap[value] = index
