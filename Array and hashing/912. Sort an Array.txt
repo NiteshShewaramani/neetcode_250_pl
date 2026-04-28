@@ -1,0 +1,44 @@
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+
+        n = len(nums)
+        startIdx = n // 2 - 1
+
+        #Build max heap → O(n)
+        while startIdx >=0:
+            self.heapfy(nums,n,startIdx)
+            startIdx -= 1 
+
+        startIdx = n-1
+        #Extract max n times → O(n log n)
+        while startIdx >0:
+            temp = nums[0]
+            nums[0] = nums[startIdx]
+            nums[startIdx] = temp
+
+            self.heapfy(nums,startIdx,0)
+            
+            startIdx -= 1
+
+        
+        return nums
+
+
+    def heapfy(self,nums: List[int],n:int,idx:int):
+
+        largestIdx = idx
+        leftIdx = idx * 2 + 1
+        rightIdx = idx * 2 + 2
+
+        if leftIdx < n and nums[leftIdx] > nums[largestIdx]:
+            largestIdx = leftIdx
+
+        if rightIdx < n and nums[rightIdx] > nums[largestIdx]:
+            largestIdx = rightIdx
+
+        # root got changed
+        if     idx != largestIdx:
+            temp = nums[idx]
+            nums[idx] = nums[largestIdx]
+            nums[largestIdx] = temp
+            self.heapfy(nums,n,largestIdx)
