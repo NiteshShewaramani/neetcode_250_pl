@@ -1,0 +1,18 @@
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # create a list of size 128 initialized to all -1 which stores the lastIndex
+        lastIndex = [-1] * 128
+        #time O(N) space O(1)
+        windowSize = 0
+        L = 0
+        for R in range(len(s)):
+            asciiValue = ord(s[R])
+            # found duplicate only assign L if new value is greater
+            if lastIndex[asciiValue] > -1 and L < (lastIndex[asciiValue] + 1) :
+                L = lastIndex[asciiValue] + 1
+            #print("L is ", L)
+            #print("R is ", R)
+            lastIndex[asciiValue] = R
+            windowSize = max(windowSize,(R-L)+1)
+
+        return windowSize

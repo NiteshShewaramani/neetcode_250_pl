@@ -1,0 +1,17 @@
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        lPointer , rPointer = 0 , len(height)-1
+        leftMax , rightMax = height[lPointer] , height[rPointer]
+        waterTrapped = 0
+        #time O(N) space O(1)
+        while lPointer < rPointer:
+            if leftMax < rightMax:
+                lPointer+=1
+                leftMax = max(leftMax,height[lPointer])
+                waterTrapped += leftMax- height[lPointer]
+            else:
+                rPointer -=1
+                rightMax = max(rightMax,height[rPointer])
+                waterTrapped += rightMax - height[rPointer]
+
+        return waterTrapped

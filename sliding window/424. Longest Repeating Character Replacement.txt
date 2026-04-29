@@ -1,0 +1,32 @@
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        L = 0
+        window = 0
+        maxFreq = 0
+        maxFreqChar = -1 #default value
+        freqCount = [0] * 26 # initialized to zero
+        #time O(N) space O(1)
+        for R in range(len(s)):
+            
+            asciiV = ord(s[R]) - ord('A')
+            freqCount[asciiV] +=1
+            if(freqCount[asciiV] > maxFreq):
+                maxFreq = freqCount[asciiV]
+
+            currentWindow = R-L+1
+            """
+            We are allowed to have at most k replacements in the window...
+            So, if max character frequency + distance between left and right is greater than k...
+            this means we have considered changing more than k charactres. So time to shrink window...
+            keep shrinking the window 1 at a timewill keep the maxwindow size constant 
+            we don't have to return the substring so while loop is not required
+            """
+            # in valid sliding window shrink the window
+            if (currentWindow - maxFreq) > k:
+                asciiV = ord(s[L]) - ord('A')
+                freqCount[asciiV] -=1  
+                L+=1
+            
+            window = max(window , (R-L)+1)
+        
+        return window

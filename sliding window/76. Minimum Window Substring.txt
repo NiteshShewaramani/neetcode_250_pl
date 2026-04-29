@@ -1,0 +1,39 @@
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        if len(s)<len(t):
+            return ""
+
+        freqCounter = [0] * 256
+        for c in t:
+            asciiV = ord(c)
+            freqCounter[asciiV]  += 1
+        #time O(N) space O(1)
+        R = 0
+        L = 0
+        minWindow = len(s)+1 #max possible window
+        startIdx = -1
+        count = 0
+
+        while R < len(s):
+            asciiV = ord(s[R])
+
+            if freqCounter[asciiV] > 0:
+                count+=1
+
+            freqCounter[asciiV]  -= 1
+            #found a valid window now try to shrink it
+            while count == len(t):
+                curWindow = R-L+1
+                if minWindow > curWindow:
+                    minWindow=curWindow
+                    startIdx=L
+
+                asciiV = ord(s[L])
+                freqCounter[asciiV]  += 1
+                if freqCounter[asciiV] > 0:
+                    count -= 1
+                L=L+1
+            R=R+1
+            
+        
+        return "" if startIdx == -1 else s[startIdx:startIdx+minWindow]

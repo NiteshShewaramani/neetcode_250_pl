@@ -1,0 +1,29 @@
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+
+        output = []
+        q = collections.deque() # stores index
+        l = r = 0
+        #time O(N) Space O(k)
+
+        for r in range(len(nums)):
+
+            # monotonic decreasing queue [8,4,1] --decreasing vlaues            
+            while q and nums[q[-1]] < nums[r]:
+                # remove from right or end of queue
+                q.pop()
+
+            q.append(r)
+
+            # reached window
+            if (r-l+1) == k:
+                # if current index l is greater then front of queue pop from front
+                if l > q[0]:#means element is not valid
+                    q.popleft()
+                
+                # append to answer if we are in window
+                output.append(nums[q[0]])
+                #move l
+                l=l+1
+
+        return output
