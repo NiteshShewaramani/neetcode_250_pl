@@ -1,0 +1,16 @@
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        stack = [] #stores indexes
+        # we need to maintain monotonic decreasing stack
+        result = [0] * len(temperatures)
+        #time and space O(N)
+        for curindex in range(len(temperatures)):
+
+            while stack and temperatures[curindex] > temperatures[stack[-1]]:
+                stackind = stack.pop()
+                #current index minus stackindex gives us the day we need to wait
+                result[stackind] = curindex - stackind
+            
+            stack.append(curindex)
+
+        return result
