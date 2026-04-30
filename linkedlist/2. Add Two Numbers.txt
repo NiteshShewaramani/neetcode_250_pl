@@ -1,0 +1,40 @@
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        p1 = l1
+        p2 = l2
+
+        #TIME O(max(N +  M)) and SPACE O(max(N +  M))
+
+        carry = 0
+        newPointer = dummy
+        while p1 and p2:
+            total = p1.val + p2.val + carry
+            carry = total // 10
+            newValue = total % 10
+            dummy.next = ListNode(newValue,None)
+            dummy = dummy.next
+            p1=p1.next
+            p2=p2.next
+        
+        while p1:
+            total = p1.val  + carry
+            carry = total // 10
+            newValue = total % 10
+            dummy.next = ListNode(newValue,None)
+            dummy = dummy.next
+            p1=p1.next
+
+        while p2:
+            total = p2.val  + carry
+            carry = total // 10
+            newValue = total % 10
+            dummy.next = ListNode(newValue,None)
+            dummy = dummy.next
+            p2=p2.next
+
+
+        if carry:
+            dummy.next = ListNode(carry,None)
+
+        return newPointer.next
