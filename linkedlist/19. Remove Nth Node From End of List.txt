@@ -1,0 +1,22 @@
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        slow,fast = head,head
+        if head is None:
+            return head
+
+        #Time O(N) SPACE O(1)
+        while n>0 and fast:
+            fast=fast.next
+            n=n-1
+
+        #if fast is null means we want to remove from head
+        if fast is None:
+            return head.next
+
+        while fast.next:
+            fast = fast.next
+            slow = slow.next
+
+        # Remove the nth node from end
+        slow.next = slow.next.next
+        return head
