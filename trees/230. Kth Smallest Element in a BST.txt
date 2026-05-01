@@ -1,0 +1,22 @@
+class Solution:
+    """
+    Time: O(h + k) (worst O(n)) Space: O(h) (worst O(n))
+    """
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        n = 0 
+        stack=[]
+        cur = root
+
+        while cur or stack:
+            #go all the way to the left 
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+
+            #pop the top of stack or lowest element
+            lowest_element_in_stack = stack.pop()
+            n=n+1
+            if n==k:
+                return lowest_element_in_stack.val
+            #check if the right value is there 
+            cur = lowest_element_in_stack.right

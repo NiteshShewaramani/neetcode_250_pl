@@ -1,0 +1,20 @@
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        result = 0
+
+        #time O(N) space O(1)
+        def height(root):
+            if not root:
+                return 0
+            
+            nonlocal result
+
+            lh = height(root.left) 
+            rh = height(root.right) 
+
+            result = max(result , lh+rh)
+
+            return 1 + max(lh,rh) 
+        
+        height(root)
+        return result
