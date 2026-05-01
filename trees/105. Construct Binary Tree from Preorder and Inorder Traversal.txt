@@ -1,0 +1,54 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    """
+    Time: O(n)(hashmap lookup is O(1) ) Space: O(n) (due to hashmap + recursion depth)
+    """
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+
+        # Map each value to its index in inorder for O(1) lookup
+        index_map = {val: i for i, val in enumerate(inorder)}
+        pre_idx = 0  # pointer for preorder
+
+        def helper(left, right):
+            if left > right:
+                return None
+            
+            nonlocal pre_idx
+            # Pick current root from preorder
+            root_val = preorder[pre_idx]
+            pre_idx += 1
+
+            root = TreeNode(root_val)
+
+            # Find split index in inorder
+            splitingIndex = index_map[root_val]
+
+            # Build left and right subtree
+            root.left = helper(left, splitingIndex - 1)
+            root.right = helper(splitingIndex + 1, right)
+
+            return root
+
+        return helper(0, len(inorder) - 1)
+    
+    """
+    Time: O(n²)(due to slicing as it also creates a list ) Space: O(n²) (due to slicing)
+    """
+    def buildTreeSlicingSolution(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+
+        if not preorder or not inorder:
+            return None
+
+        root = TreeNode(preorder[0]) #first is preorder will always be root
+        #get the index of root which will be splitting index for tree
+        splitingIndex = inorder.index(root) 
+        root.left  = self.buildTree( preorder[1:splitingIndex+1] , inorder[:splitingIndex]   )
+        root.right = self.buildTree( preorder[splitingIndex+1:]  , inorder[splitingIndex+1:] )
+
+        return root
+        
