@@ -1,0 +1,31 @@
+class Solution:
+    #time NlogN Space O(N) -heap space
+    def getOrder(self, tasks: List[List[int]]) -> List[int]:
+        minHeap = []
+        result = []
+        for i,t in enumerate(tasks):
+            #append a third value on index here since we will change index once we sort this
+            t.append(i)
+        
+        #sort by enque value or starttime
+        tasks.sort(key = lambda t : t[0])
+        currentTaskIndex , currentTime = 0 ,tasks[0][0]
+
+        while minHeap or currentTaskIndex < len(tasks):
+
+            while currentTaskIndex < len(tasks) and currentTime >= tasks[currentTaskIndex][0]:
+                # to the heap push the processing time and index
+                heapq.heappush(minHeap , [tasks[currentTaskIndex][1],tasks[currentTaskIndex][2]])
+                #keep incrementing the index tasks is sorted by time
+                currentTaskIndex = currentTaskIndex+1
+            
+            if not minHeap:
+                #if heap is empty change time
+                currentTime = tasks[currentTaskIndex][0]
+            else:
+                #completing 1 task
+                processingTime , startIndex = heapq.heappop(minHeap)
+                currentTime = currentTime + processingTime
+                result.append(startIndex)
+        
+        return result

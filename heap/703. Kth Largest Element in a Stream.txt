@@ -1,0 +1,29 @@
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        #minheap with k largest elements
+        self.minHeap = []
+        self.k = k
+        #total time NlogK
+        #total space O(K)
+        for n in nums:
+            heapq.heappush(self.minHeap,n) #logK
+            if len(self.minHeap) > self.k: 
+                heapq.heappop(self.minHeap) #logK
+
+        
+
+    def add(self, val: int) -> int:
+        heapq.heappush(self.minHeap,val)
+        # add 1 and pop 1
+        if len(self.minHeap) > self.k:
+            heapq.heappop(self.minHeap)
+
+        return  self.minHeap[0]
+
+        
+
+
+# Your KthLargest object will be instantiated and called as such:
+# obj = KthLargest(k, nums)
+# param_1 = obj.add(val)
