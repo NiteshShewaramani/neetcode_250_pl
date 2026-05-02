@@ -1,0 +1,33 @@
+class Solution:
+    #total time O(N) space O(1)
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        freq = [0] * 26
+        #O(N)
+        for t in tasks:
+            index = ord(t) - ord('A')
+            freq[index] += 1
+        
+        # Sort the frequency array in non-decreasing order
+        freq.sort() #26log26
+        # since array is sorted maxfreq will be at end
+        # we do -1 bcaz task will end here so no slots after this
+        maxFreq = freq[-1] - 1
+
+        # if we assign this first how many idle slots will be 
+        # for example input is AAAABBCC and n= 1 
+        # then 3*1 = 3 slots we did -1 above
+        idleSlots = maxFreq * n
+
+        index = 24
+        while index >= 0 and freq[index]>0:
+            # Subtract the minimum of the maximum frequency and the current frequency from the idle slots
+            idleSlots = idleSlots - min(maxFreq,freq[index])
+
+            index -=1
+
+        size = len(tasks)
+        # If there are any idle slots left, add them to the total number of tasks
+        if idleSlots > 0:
+            return idleSlots + size
+        else:
+            return size

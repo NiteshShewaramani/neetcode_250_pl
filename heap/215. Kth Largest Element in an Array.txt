@@ -1,0 +1,20 @@
+class Solution:
+    """
+    TC : O(n + k log n). For large n and small k, this is efficient; for k close to n, it approaches O(n log n).
+    """
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        minHeap = [-s for s in nums]
+        heapq.heapify(minHeap)
+
+        while k > 1:
+            heapq.heappop(minHeap)
+            k-=1
+
+        element = heapq.heappop(minHeap)
+
+        if element < 0:
+            return abs(element)
+        elif element > 0:
+            return (-1)*element
+        else:
+            return 0

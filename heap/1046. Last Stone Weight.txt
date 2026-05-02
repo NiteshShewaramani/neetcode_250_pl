@@ -1,0 +1,21 @@
+class Solution:
+    """
+    Time Complexity: O(n log n) 
+    Space Complexity: O(n)
+    """
+    def lastStoneWeight(self, stones: List[int]) -> int:
+        #for every value in stonre convert it into negative so we can get maxheap
+        maxHeap = [-s for s in stones]
+        heapq.heapify(maxHeap)
+
+        while len(maxHeap) > 1:
+            first = -heapq.heappop(maxHeap)
+            second = -heapq.heappop(maxHeap)
+            
+            if second != first:
+                heapq.heappush(maxHeap , -(first-second))
+
+        
+        # add 0 if maxheap is empty
+        maxHeap.append(0)
+        return abs(maxHeap[0])
