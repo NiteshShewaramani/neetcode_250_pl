@@ -1,0 +1,37 @@
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        """
+                                    (0, 0, '')
+								 	    |	
+									(1, 0, '(')  
+								   /           \
+							(2, 0, '((')      (1, 1, '()')
+							   /                 \
+						(2, 1, '(()')           (2, 1, '()(')
+						   /                       \
+					(2, 2, '(())')                (2, 2, '()()')
+						      |	                             |
+					res.append('(())')             res.append('()()')
+            Time comlexity-> 2^n since it will take 2^n recursive calls & 
+            Space complexity -> n as space grows as Target grows
+        """
+        res = []
+        stack =[]
+        def backtrack(left:int, right:int):
+            if n*2 == len(stack):
+                newstr = "".join(stack)
+                res.append(newstr)
+                return
+            
+            if left < n:
+                stack.append("(")
+                backtrack(left+1,right)
+                stack.pop()
+            if right < left:
+                stack.append(")")
+                backtrack(left,right+1)
+                stack.pop()
+        
+        
+        backtrack(0,0)
+        return res

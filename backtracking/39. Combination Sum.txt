@@ -1,0 +1,27 @@
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        result = []
+        candidates.sort()
+        #time 2^target recursion depth is upto target space is T recursion depth +output space 
+        def dfs(index,curList,t):
+
+            if t == 0:
+                result.append(list(curList))
+                return
+
+            if index>=len(candidates) or t<0:
+                return 
+
+
+            if t>=candidates[index]:
+                curList.append(candidates[index])
+                dfs(index,curList,t - candidates[index])
+                #backtrack
+                curList.pop()
+            
+            #not pick
+            dfs(index+1,curList,t)
+
+        
+        dfs(0,[],target)
+        return result

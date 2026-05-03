@@ -1,0 +1,31 @@
+class Solution:
+    #TC n x  2 ^ n
+    #SC n x  2 ^ n
+    # Max depth of recursion  = n
+    #Total subsets = up to 2 ^ n Each subset can take up to n space
+
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        res = []
+
+        def backtrack(index,subset):
+            if index == len(nums):
+                s_copy = subset.copy()
+                #make sure to pass the copy and not the refernce of original list
+                res.append(s_copy)
+                return 
+            
+            #pick 
+            subset.append(nums[index])
+            backtrack(index+1,subset)
+            subset.pop()
+            
+            #not pick
+            #if we are skiping an element make sure to skip all copies of that to avoid duplicates
+            while index + 1 < len(nums) and nums[index] == nums[index+1]:
+                index = index+1
+
+            backtrack(index+1,subset)
+
+        backtrack(0,[])
+        return res

@@ -1,0 +1,32 @@
+class Solution:
+    """
+    n=length of digit
+    Time O(n x 4^n) Space O(n) (auxiliary: recursion + temp list)  + O(n × 4^n) (output)
+    """
+    def letterCombinations(self, digits: str) -> List[str]:
+        digitToChar = {
+            "2":"abc",
+            "3":"def",
+            "4":"ghi",
+            "5":"jkl",
+            "6":"mno",
+            "7":"pqrs",
+            "8":"tuv",
+            "9":"wxyz"
+        }
+        res = []
+
+        def backtrack(index,currentStr):
+            if len(currentStr) == len(digits):
+                res.append("".join(currentStr)) #takes O(n)
+                return
+
+            for c in digitToChar[digits[index]]:
+                currentStr.append(c)
+                backtrack(index+1,currentStr)
+                currentStr.pop()
+
+        #if digits is not empty
+        if digits:
+            backtrack(0,[])
+        return res 
