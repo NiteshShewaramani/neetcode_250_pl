@@ -1,0 +1,25 @@
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        result=[]
+        #time (2 ^ N)xK K is size of combination space - (2^N)xK
+        def dfs(index,curList,curTarget):
+            if curTarget == 0:
+                #K time here in copying combination to O/P array
+                result.append(list(curList))
+                return
+            if curTarget < 0 or index == len(candidates):
+                return
+
+            curList.append(candidates[index])
+            dfs(index+1 ,curList , curTarget - candidates[index] )
+            curList.pop()
+
+            #skip duplicate values
+            while index+1 < len(candidates) and candidates[index] == candidates[index+1]:
+                index=index+1
+
+            dfs(index+1,curList , curTarget)
+            
+        dfs(0,[],target)
+        return result

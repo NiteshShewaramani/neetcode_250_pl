@@ -1,0 +1,28 @@
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        """
+        Total permutations = n! For each permutation, you copy the list → O(n)
+        Final Time Complexity: O(n!×n)
+        Space Complexity: O(n) (auxiliary) + O(n! × n) (output)
+        """
+        res = []
+        visited = [0] * len(nums)
+        self.recursion(nums, [], visited, res)
+        return res
+
+    
+    def recursion(self, nums, curr, visited, res):
+        # base case
+        if len(curr) == len(nums):
+            res.append(curr.copy())
+            return
+        
+        for i in range(len(nums)):
+            if visited[i] == 0:
+                curr.append(nums[i])
+                visited[i] = 1
+
+                self.recursion(nums, curr, visited, res)
+                # backtrack
+                curr.pop()
+                visited[i] = 0
