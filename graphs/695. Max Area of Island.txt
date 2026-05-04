@@ -1,0 +1,28 @@
+class Solution:
+    # tc O(N x M) sc O(N xM)
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        if not grid:
+            return 0
+
+        rows = len(grid)
+        cols = len(grid[0])
+        g_copy = grid.copy()
+
+        def dfs(r,c):
+            if (r>=rows or c>=cols or r<0 or c<0 or g_copy[r][c]==0):
+                return 0
+
+            g_copy[r][c] = 0
+            top = dfs(r-1,c)
+            bottom = dfs(r+1,c)
+            left = dfs(r,c-1)
+            right = dfs(r,c+1)
+
+            return 1+top+bottom+left+right    
+
+        maxarea = 0
+        for i in range(rows):
+            for j in range(cols):
+                if g_copy[i][j] == 1:
+                    maxarea = max(maxarea,dfs(i,j))
+        return maxarea

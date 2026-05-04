@@ -1,0 +1,35 @@
+class Solution:
+    #Time Complexity: O(V + E) Space Complexity: O(V + E)
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        premap = {c:[] for c in range(numCourses)}
+        visit = [0] * numCourses
+        pathvisited = [0] * numCourses
+        output = []
+
+        #build graph
+        for a, b in prerequisites:
+            #taking reverse here reversing the edges
+            premap[a].append(b)
+
+        def dfs(source):
+            if pathvisited[source] == 1:
+                return False
+            if visit[source] == 1:
+                return True
+
+            pathvisited[source] = 1
+
+            for node in premap[source]:
+                if not dfs(node):
+                    return False
+
+            pathvisited[source] = 0
+            visit[source] = 1
+            output.append(source)   
+            return True
+
+        for i in range(numCourses):
+            if not dfs(i):
+                return []
+
+        return output
