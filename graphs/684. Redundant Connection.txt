@@ -1,0 +1,42 @@
+class Solution:
+    """
+    n is no of edges
+    TC  O(n⋅α(n))≈O(n) Each findParent operation takes O(α(n)), 
+    where α is the inverse Ackermann function 
+    SC O(n)
+    """
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        n = len(edges)
+
+        size = [1] * (n+1)
+        parent = [i for i in range(n+1)] #need to add edge n as well
+
+        def findParent(node):
+            if node == parent[node]:
+                return node
+
+            #path compression
+            parent[node] = findParent(parent[node])
+            return parent[node]
+        
+
+        def unionBySize(node1,node2):
+            p1 = findParent(node1)
+            p2 = findParent(node2)
+
+            if p1==p2:
+                #found the cycle
+                return True 
+
+            if size[p1] < size[p2]:
+                size[p2] += size[p1]
+                parent[p1] = p2
+            else:
+                size[p1] += size[p2]
+                parent[p2] = p1
+            
+            return False
+
+        for u,v in edges:
+            if unionBySize(u,v):
+                return [u,v]

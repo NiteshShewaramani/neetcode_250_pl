@@ -1,0 +1,36 @@
+class Solution:
+    #TC O(V+E) SC O(V+E)
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        if n==0:
+            return True
+
+        if len(edges) != n - 1:
+            return False
+
+        premap = {i:[] for i in range(n)}
+        #undirected graph
+        for a,b in edges:
+            premap[a].append(b)
+            premap[b].append(a)
+
+        visited = [0] * n
+        def cycleDetection(src,parent):
+            #mark visited first
+            visited[src] = 1
+               
+
+            for node in premap[src]:
+                if visited[node] == 0:
+                    if not cycleDetection(node, src):
+                        return False
+                elif node != parent:
+                    return False
+            
+            return True
+
+        for i in range(n):
+            if visited[i] == 0:
+                if not cycleDetection(i,-1):
+                    return False
+
+        return True

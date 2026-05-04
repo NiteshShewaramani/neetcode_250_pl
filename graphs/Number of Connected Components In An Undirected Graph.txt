@@ -1,0 +1,39 @@
+class Solution:
+    #TC O((n + m) x α(n)) , α(n) for Union Find
+    #n no of vertices/nodes
+    #m no of edges 
+    #Space Complexity: O(n)
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        parent = [i for i in range(n)]
+        size = [1] * n
+
+        def findParent(node1):
+            if node1 == parent[node1]:
+                return node1
+
+            #path compression
+            parent[node1] = findParent(parent[node1])
+            return parent[node1]
+
+        def unionBySize(node1, node2):
+            p1 = findParent(node1)
+            p2 = findParent(node2)
+
+            if p1==p2:
+                return 0
+
+            if size[p1] < size[p2]:
+                size[p2] = size[p2] + size[p1]
+                parent[p1] = p2
+            else:
+                size[p1] = size[p1] + size[p2]
+                parent[p2] = p1
+            
+            return 1
+
+        res = n
+        for u,v in edges:
+            #we subtract from result when we do union
+            res = res - unionBySize(u,v)
+
+        return res

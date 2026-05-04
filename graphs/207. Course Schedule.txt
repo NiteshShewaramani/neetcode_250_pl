@@ -1,0 +1,29 @@
+class Solution:
+    #Time Complexity: O(V + E) Space Complexity: O(V + E)
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        premap = {i:[] for i in range(numCourses)}
+
+        for node1 , node2 in prerequisites:
+            premap[node1].append(node2)
+        
+        pathvisited = set()
+        def dfs(src):
+            if src in pathvisited:
+                return False
+            if premap[src] ==[]:
+                return True
+
+            pathvisited.add(src)
+            for node in premap[src]:
+                if not dfs(node):
+                    return False
+            pathvisited.remove(src)
+            #mark it empty we don't want to visit same again
+            premap[src] =[]
+            return True
+
+        for src in premap:
+            if not dfs(src):
+                return False
+
+        return True
