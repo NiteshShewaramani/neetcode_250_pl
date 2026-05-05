@@ -1,0 +1,35 @@
+class Solution:
+    """
+    The grid has N × N cells → total nodes = N²
+    Each cell is pushed into the heap at most once (because of vis set)
+    For each push/pop operation on heap:
+    Heap size is at most N²
+    So each operation costs O(log(N²)) = O(log N)
+    Each cell explores 4 directions → constant factor
+    TC = O(N^2 logN)
+    sc = O(N^2)
+    """
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        N = len(grid)
+        visited = set()
+        minheap=[[grid[0][0],0,0]] #minheap by element
+        directions = [[1,0],[0,1],[-1,0],[0,-1]]
+        visited.add((0,0))
+
+        while minheap:
+            element , r, c = heapq.heappop(minheap)
+            
+
+            if r==N-1 and c==N-1:
+                return element
+
+            for i,j in directions:
+                nr = r+i
+                nc = c+j
+
+                if 0<=nr<N and 0<=nc<N and not (nr,nc) in visited:
+                    visited.add((nr,nc))
+                    newmax = max(grid[nr][nc] , element)
+                    heapq.heappush(minheap ,[newmax ,nr,nc])
+
+        return -1

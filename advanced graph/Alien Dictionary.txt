@@ -1,0 +1,59 @@
+class Solution:
+    """
+    N is no of words K is minLength
+    Time O(N⋅K + V + E)
+
+    Space O(V+E)
+    """
+    def foreignDictionary(self, words: List[str]) -> str:
+        adj = {c:set() for w in words for c in w}
+
+        visited = [0] * 26
+        pathvisited = [0]  * 26
+
+        for index in range(len(words)-1):
+            word1 , word2 = words[index] , words[index+1]
+            minLength = min(len(word1), len(word2))
+            if len(word1)> len(word2) and word1[:minLength] == word2[:minLength]:
+                #invalid use case
+                #words can be equal and word1 can't be greater than word2
+                return ""
+            
+            for j in range(minLength):
+                if word1[j] != word2[j]:
+                    #connecting edges
+                    adj[word1[j]].add(word2[j])
+                    break
+
+        
+        res = []
+        def dfs(src):
+            asciiValueSrc = ord(src) - ord('a')
+            visited[asciiValueSrc] = 1
+            pathvisited[asciiValueSrc] = 1
+
+            for node in adj[src]:
+                asciiValue = ord(node) - ord('a')
+                if visited[asciiValue] == 0:
+                    if dfs(node):
+                        #if found a cycle return true
+                        return True
+
+                elif pathvisited[asciiValue] == 1:
+                    #found a cycle
+                    return True
+
+            res.append(src)
+            pathvisited[asciiValueSrc] = 0
+            return False
+
+        for c in adj:
+            asciiValue = ord(c) - ord('a')
+            if visited[asciiValue]==0:
+                #if not visited and had outgoing edges
+                if dfs(c):
+                    #found cycle return 
+                    return ""
+        
+        res.reverse()
+        return "".join(res)

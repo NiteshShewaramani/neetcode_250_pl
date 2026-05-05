@@ -1,0 +1,32 @@
+class Solution:
+    """
+    Time Complexity:O(E*K)
+     where E is the number of edges and K is the maximum number of stops allowed.
+    Space Complexity:O(N+E) 
+    where N is the number of nodes and E is the number of edges. 
+    It accounts for adjacency list, distances array, and the queue
+    """
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+
+        adj = [[] for i in range(n)]
+        q=deque()
+        #distance , stops , starting node
+        q.append((0,0,src))
+        # Distance array
+        dist = [math.inf] * n
+        dist[src] = 0
+
+        for u,v,w in flights:
+            adj[u].append((w,v))
+
+        while q:
+            start_distance, start_stops, start_node = q.popleft()
+
+            for cDist,cNode in adj[start_node]:
+                if cDist+start_distance < dist[cNode] and (start_stops + 1)<=k:
+                    dist[cNode]= cDist+start_distance
+                    q.append((dist[cNode],start_stops + 1,cNode))
+                elif cNode==dst and cDist+start_distance < dist[cNode]:
+                    dist[cNode]= cDist+start_distance
+        
+        return -1 if dist[dst]==math.inf else dist[dst]
