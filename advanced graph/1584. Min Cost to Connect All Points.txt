@@ -1,0 +1,33 @@
+class Solution:
+    #time O(NxN logN) Space O(Nx N)
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        Nodes = len(points)
+        
+        adjMap = {i:[] for i in range(Nodes)} # i list of distance and node
+        #O(N x N)
+        for i in range(Nodes):
+            x1,y1 = points[i]
+            for j in range(i+1,Nodes):
+                x2,y2 = points[j]
+                dist = abs(x1-x2) + abs(y1-y2)
+                adjMap[i].append([dist,j])
+                adjMap[j].append([dist,i])
+
+        minHeap = [[0,0]] # distance,node
+        result = 0
+        visited = set()
+        #Heap will be no of edges NxN log N
+        while len(visited) <Nodes:
+            distance , point = heapq.heappop(minHeap)
+
+            if point in visited:
+                continue
+            
+            result = result + distance
+            visited.add(point)
+
+            for neiDist , neiPoint in adjMap[point]:
+                if neiPoint not in visited:
+                    heapq.heappush(minHeap, [neiDist,neiPoint])
+        
+        return result

@@ -1,0 +1,58 @@
+class Solution:
+    """
+    Time:
+    Sorting: O(E log E)
+    DFS traversal: O(E) -travesing each edge exactly once
+    Total: O(E log E)
+    Space:
+    Graph: O(E)
+    Recursion stack: O(E)
+    Result: O(E)
+    Total: O(E)
+    """
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        
+        adj = defaultdict(list)
+        for src, dst in sorted(tickets)[::-1]:
+            adj[src].append(dst)
+        #Hierholzer's Algorithm (Recursion)
+        res = []
+        def dfs(src):
+            while adj[src]:
+                dst = adj[src].pop()
+                dfs(dst)
+            res.append(src)
+
+        dfs('JFK')
+        return res[::-1] #returning in reverse
+"""
+example below
+tickets = [
+  ["JFK","KUL"],
+  ["JFK","NRT"],
+  ["NRT","JFK"]
+]
+
+After sorting + reversing:
+
+adj = {
+  "JFK": ["NRT", "KUL"],
+  "NRT": ["JFK"]
+}
+
+Execution
+dfs("JFK")
+  → go to "KUL" (smallest via pop)
+    → no edges → add "KUL"
+  → go to "NRT"
+    → go to "JFK"
+      → no edges → add "JFK"
+    → add "NRT"
+  → add "JFK"
+Result (before reverse):
+["KUL", "JFK", "NRT", "JFK"]
+
+Result (after reverse):
+["JFK", "NRT", "JFK", "KUL"]
+
+        """

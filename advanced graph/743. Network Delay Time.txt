@@ -1,0 +1,27 @@
+class Solution:
+    # TC O(E x logV) SC O(E + V)
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+
+        edges = {i:[] for i in range(n+1)}
+
+        #create adjency list
+        for u,v,w in times:
+            edges[u].append([v,w])
+
+        minHeap = [(0,k)]
+        visited = set()
+        max_time = 0
+
+        while minHeap:
+            time , node = heapq.heappop(minHeap)
+
+            if node in visited:
+                continue
+
+            max_time = max(max_time,time)
+            visited.add(node)
+            for neiNode , neiTime in edges[node]:
+                if neiNode not in visited:
+                    heapq.heappush(minHeap , (neiTime + time ,neiNode)) 
+        
+        return max_time if len(visited) == n else -1
