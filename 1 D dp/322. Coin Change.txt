@@ -1,0 +1,16 @@
+class Solution:
+    # TC (amount x len(coins)) SC (amount array)
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        amountsdp = [float('inf')] * (amount+1)
+        #this means if we want to compute amount zero we need zero coins
+        amountsdp[0] = 0
+
+        for a in range(1,amount+1):
+            for c in coins:
+                #it means amount is greater than coin so we can use it 
+                if a-c>=0:
+                    #either it is existing or a new solution is there
+                    amountsdp[a] = min(amountsdp[a] , 1 + amountsdp[a-c])
+                    #print(f" amount is {a} dp value is {amountsdp[a]} ")
+
+        return amountsdp[amount] if amountsdp[amount] != float('inf') else -1

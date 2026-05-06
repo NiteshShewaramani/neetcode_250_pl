@@ -1,0 +1,36 @@
+class Solution:
+    #Time: O(n × target)
+    #Space: O(n × target)
+    def canPartition(self, nums: List[int]) -> bool:
+        totalTarget = sum(nums)
+        if totalTarget % 2 != 0:
+            return False
+
+        target = totalTarget // 2
+
+        dp = [[None] * (target+1) for _ in range(len(nums)) ]
+        #create a dp with all -1 initialization
+
+        def recursion(index,target):
+            if target == 0:
+                return True
+
+            if index >= len(nums):
+                return False
+
+            if dp[index][target] != None:
+                return dp[index][target]
+
+            take = False
+            if target >= nums[index]:
+                #take
+                take = recursion(index+1,target - nums[index])
+
+            nottake = recursion(index+1,target)
+
+            dp[index][target] = take or nottake # true or false
+            
+            return dp[index][target]
+
+        ans = recursion(0,target)
+        return ans

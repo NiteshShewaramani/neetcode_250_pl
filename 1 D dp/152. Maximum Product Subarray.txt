@@ -1,0 +1,18 @@
+class Solution:
+    #Time: O(n) Space: O(1)
+    # 2 pointer prefix and suffix sum
+    def maxProduct(self, nums: List[int]) -> int:
+        leftpro , rightpro = 1,1
+        maxV = nums[0]
+
+        for index in range(len(nums)):
+
+            leftpro = 1 if leftpro == 0 else leftpro
+            rightpro = 1 if rightpro == 0 else rightpro
+
+            leftpro = leftpro * nums[index]
+            rindex = len(nums) - (index+1)
+            rightpro = rightpro * nums[rindex]
+            maxV = max(maxV, max(leftpro,rightpro))
+        
+        return maxV 

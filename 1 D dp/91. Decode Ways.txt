@@ -1,0 +1,29 @@
+class Solution:
+    def numDecodings(self, s: str) -> int:
+
+        dp = [-1] * len(s)
+        #Time: O(n) Space: O(n) (due to memoization + recursion stack)
+
+        def recursion(index):
+            if index==len(s):
+                return 1
+            
+            if index > len(s):
+                return 0
+            
+            if s[index] == "0":
+                return 0
+
+            if dp[index] !=-1:
+                return dp[index]
+
+            single = recursion(index+1)
+            double = 0
+            if index+1 < len(s) and (s[index] =="1" or (s[index] =="2") and s[index+1] in "0123456"): 
+                double = recursion(index+2)
+
+            dp[index] =  single + double
+            
+            return dp[index]
+        
+        return recursion(0)

@@ -1,0 +1,14 @@
+class Solution:
+    #time O(N) Space O(1)
+    def climbStairs(self, n: int) -> int:
+
+        if n<=3:
+            return n
+
+        a,b = 2,3
+        while n > 3:
+            b = a+b # 3+2
+            a = b-a # 5 -2 now 3
+            n=n-1
+        
+        return b  

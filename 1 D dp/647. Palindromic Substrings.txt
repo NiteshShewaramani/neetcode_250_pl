@@ -1,0 +1,23 @@
+class Solution:
+    # TIME O(n^2)  SC O(1)
+    def countSubstrings(self, s: str) -> int:
+        res = 0
+        #the idea is we consider the every character as middle of palindrom
+        #and start moving outwards
+        for i in range(len(s)):
+            l=r=i
+            #checking for odd length 
+            while l>=0 and r < len(s) and s[l] == s[r]:
+                l = l - 1
+                r = r + 1
+                res=res+1
+            
+            l=i
+            r=i+1
+            #checking for even length
+            while l>=0 and r < len(s) and s[l] == s[r]:
+                l = l - 1
+                r = r + 1
+                res=res+1
+        
+        return res

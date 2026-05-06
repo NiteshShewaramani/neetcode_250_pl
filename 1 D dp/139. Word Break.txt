@@ -1,0 +1,29 @@
+class Solution:
+    #Time: O(n * m * k)
+    # n = length of string
+    # m = number of words
+    # k = average word length
+    # Space: O(n) (memoization + recursion stack)
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        dp = [-1] * (len(s)+1)
+        def recursion(startIdx):
+            if startIdx == len(s):
+                return True
+            
+            if dp[startIdx] != -1:
+                return dp[startIdx] == 1 
+
+            for word in wordDict:
+                curLen = len(word)
+                endIdx = startIdx + curLen 
+                newWord = s[startIdx:endIdx]
+
+                if word == newWord:
+                    if(recursion(endIdx)):
+                        dp[startIdx] = 1
+                        return True
+                    
+            
+            dp[startIdx] = 0
+            return False
+        return recursion(0)
