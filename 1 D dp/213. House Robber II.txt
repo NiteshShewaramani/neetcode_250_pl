@@ -1,0 +1,16 @@
+class Solution:
+    #time O(N + N) Space O(1)
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+        
+        def solve(startIdx,endIdx):
+            rob1 , rob2 = 0,0
+            #[rob1,rob2,n,n+1,n+2,n+3......]
+            for ind in range(startIdx,endIdx):
+                temp = max(nums[ind]  + rob1 , rob2)
+                rob1 = rob2
+                rob2 = temp
+            return rob2
+
+        return max( solve(0,len(nums)-1), solve(1,len(nums))  )
