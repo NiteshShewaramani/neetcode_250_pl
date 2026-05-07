@@ -1,0 +1,32 @@
+class Solution:
+    """
+    TC: O(N * 2)
+    SC: O(N * 2)
+    buy == 1  (allowed to buy)
+    buy == 0  (need to sell / holding stock)
+    Cooldown after selling: move to ind + 2
+    """
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        dp = [[-1] * 2 for _ in range(n + 2)]  # n+2 to safely access ind+2
+
+        def functionMemo(ind: int, buy: bool) -> int:
+            # base case
+            if ind >= n:
+                return 0
+
+            if dp[ind][buy] != -1:
+                return dp[ind][buy]
+
+            if buy:
+                buyingNow = -prices[ind] + functionMemo(ind + 1, False)
+                notBuy = functionMemo(ind + 1, True)
+                dp[ind][buy] = max(buyingNow, notBuy)
+            else:
+                sell = prices[ind] + functionMemo(ind + 2, True)   # cooldown
+                notSell = functionMemo(ind + 1, False)
+                dp[ind][buy] = max(sell, notSell)
+
+            return dp[ind][buy]
+
+        return functionMemo(0, True)

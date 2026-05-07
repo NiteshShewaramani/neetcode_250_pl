@@ -1,0 +1,26 @@
+class Solution:
+    #TC O(N x M)  SC O(N x M)
+    def minDistance(self, word1: str, word2: str) -> int:
+        n,m = len(word1),len(word2)
+        dp=[[-1] * m for _ in range(n)]
+
+        def dfs(i,j):
+            #if 1 string has reached end return remaining char in another string
+            if j == m:
+                return (n-i)
+            if i==n:
+                return (m-j)
+            
+            if dp[i][j]!=-1:
+                return dp[i][j]
+
+            if word1[i] == word2[j]:
+                dp[i][j] = dfs(i+1,j+1)
+                return dp[i][j]
+            else:
+                replace = dfs(i+1,j+1)
+                delete = dfs(i+1,j)
+                insert = dfs(i,j+1)
+                dp[i][j] = 1 + min(replace,insert,delete)
+                return dp[i][j]
+        return dfs(0,0)

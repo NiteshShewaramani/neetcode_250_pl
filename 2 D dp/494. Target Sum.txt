@@ -1,0 +1,45 @@
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        """
+        Example [1,1,1,1,1] total sum = 5 , target =3
+        4-1 = 3
+        4+1 = 5
+        lets say 4 is a group of poditive no and 1 is a group of negative no
+        P + N = totalsum
+        P - N = target
+        2N = totalsum - target
+        N = (totalsum - target) // 2
+        how many waye we can form N will be our answer
+
+        Time O(len(NUMS) x newTarget ) Space O(len(NUMS) x newTarget )
+        """
+        totalSum = sum(nums)
+        newTarget = (totalSum-target)
+        if newTarget < 0 or newTarget%2==1:
+            return 0
+        
+        newTarget = newTarget//2
+        
+        dp=[ [-1]*(newTarget+1) for _ in range(len(nums)) ]
+
+        def dfs(index,remaining):
+            if index == 0:
+                if remaining == 0 and nums[0]==0:
+                    return 2
+                if remaining == 0 or nums[0]==remaining:
+                    return 1
+                return 0
+            
+            if dp[index][remaining] !=-1:
+                return dp[index][remaining]
+            
+            take = 0
+            if remaining>=nums[index]:
+                take = dfs(index-1,remaining-nums[index])
+
+            nottake = dfs(index-1,remaining)
+            dp[index][remaining] = take+nottake
+
+            return dp[index][remaining]
+        
+        return dfs(len(nums)-1 , newTarget)

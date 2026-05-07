@@ -1,0 +1,27 @@
+class Solution:
+#TIME O(N x M) SPACE O(N x M) MEMO
+    def numDistinct(self, s: str, t: str) -> int:
+        n,m = len(s),len(t)
+        dp=[[-1]*m for _ in range(n)]
+        def dfs(p1,p2):
+            #reached end of p2
+            if p2 >=m:
+                return 1
+            if p1>=n:
+                #reached end of p1 but p2 is still there
+                return 0
+            
+            if dp[p1][p2]!=-1:
+                return dp[p1][p2]
+
+            if s[p1]==t[p2]:
+                pick =     dfs(p1+1,p2+1)
+                notpick = dfs(p1+1,p2)
+                dp[p1][p2] = pick+notpick
+                return pick+notpick
+            else:
+                notpick = dfs(p1+1,p2)
+                dp[p1][p2] = notpick
+                return notpick
+        
+        return dfs(0,0)
