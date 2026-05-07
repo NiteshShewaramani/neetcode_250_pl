@@ -1,0 +1,30 @@
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        """
+        TC O(N x Amount) SC O(N x Amount) Memo
+        """
+
+        dp = [ [-1]*(amount+1) for _ in range(len(coins)) ]
+
+        def dfs(index,remaining):
+            if remaining == 0:
+                return 1
+            
+            if  index ==0:
+                if remaining%coins[0]==0:
+                    return 1
+                else:
+                    return 0
+
+            if dp[index][remaining]!=-1:
+                return dp[index][remaining]
+            ntake = dfs(index-1,remaining)
+
+            take = 0
+            if remaining >= coins[index]:
+                take = dfs(index,remaining - coins[index])
+
+            dp[index][remaining] = take+ntake
+            return dp[index][remaining]
+        
+        return dfs(len(coins)-1,amount)

@@ -1,0 +1,34 @@
+class Solution:
+    #Time: O(n × m) Space: O(n × m) tabular
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        n,m = len(text1),len(text2)
+        # Create DP table with extra row & column (base case = 0)
+        dp = [[0] * (m+1) for _ in range(n+1) ]
+
+        # Fill from bottom-right to top-left
+        for i in range(n-1,-1,-1):
+            for j in range(m-1,-1,-1):
+                if text1[i] == text2[j]:
+                    dp[i][j] = 1 + dp[i+1][j+1]
+                else:
+                    dp[i][j] = max(dp[i][j+1],dp[i+1][j])
+
+        return dp[0][0]
+
+        # def dfs(index1,index2):
+        #     if index1>=n or index2>=m:
+        #         return 0
+
+        #     if dp[index1][index2] != -1:
+        #         return dp[index1][index2] 
+        #     take = 0
+        #     if text1[index1] == text2[index2]:
+        #         take = 1 + dfs(index1+1,index2+1)
+
+        #     forwardSecondStr = dfs(index1,index2+1)
+        #     forwardFirstStr = dfs(index1+1,index2)
+        #     dp[index1][index2] = max(take,forwardFirstStr,forwardSecondStr)
+
+        #     return dp[index1][index2] 
+        
+        # return dfs(0,0)

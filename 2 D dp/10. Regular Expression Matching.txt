@@ -1,0 +1,33 @@
+class Solution:
+    #Time: O(len(s) × len(p)) Space: O(len(s) × len(p))
+    def isMatch(self, s: str, p: str) -> bool:
+        dp = {} 
+
+        def dfs(p1,p2):
+            if (p1, p2) in dp:
+                return dp[(p1, p2)]
+            if p1==len(s) and p2==len(p):
+                return True
+            
+            #we exhausted string 2 check where is string 1
+            if p2 == len(p):
+                return p1 == len(s)
+
+            if p2+1<len(p) and p[p2+1]=="*":
+                nottake = dfs(p1,p2+2)
+
+                take = False
+                if p1 < len(s)  and (s[p1] == p[p2] or p[p2]=='.'):
+                    take = dfs(p1+1,p2)
+                
+                dp[(p1, p2)] = take or nottake 
+                return dp[(p1, p2)]
+            else:
+                if p1 < len(s)  and  p2 < len(p) and (s[p1]==p[p2] or p[p2]=='.'):
+                    dp[(p1, p2)] =  dfs(p1+1,p2+1)
+                    return dp[(p1, p2)]
+                else:
+                    dp[(p1, p2)] = False
+                    return False
+        return dfs(0,0)
+        
