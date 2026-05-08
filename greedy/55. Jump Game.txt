@@ -1,0 +1,13 @@
+class Solution:
+#TC O(N) SC O(1)
+    def canJump(self, nums: List[int]) -> bool:
+        reachableIndex = 0
+
+        for index in range(len(nums)):
+
+            if index > reachableIndex:
+                return False
+            
+            reachableIndex = max(reachableIndex , index + nums[index])
+        
+        return True
