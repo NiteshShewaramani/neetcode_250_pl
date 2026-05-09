@@ -1,0 +1,18 @@
+class Solution:
+    #TC O(N log N) SC O(N)
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        #O (nlogn)
+        intervals.sort(key = lambda i:i[0]) #sort by start value
+        #intervals.sort(key = lambda i:i[1]) sort by end value
+
+        output =[]
+        output.append(intervals[0])
+
+        for start,end in intervals[1:]:
+            lastEnd = output[-1][1] #-1for last value then 1 for end 
+
+            if start <= lastEnd:
+                output[-1][1] = max(lastEnd,end)
+            else:
+                output.append([start,end])
+        return output

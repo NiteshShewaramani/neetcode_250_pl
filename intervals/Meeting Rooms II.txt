@@ -1,0 +1,34 @@
+"""
+Definition of Interval:
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+"""
+
+class Solution:
+    #TC O(NlogN) SC O(N)
+    def minMeetingRooms(self, intervals: List[Interval]) -> int:
+        if len(intervals) <1 :
+            return 0
+        start = []
+        end   = []
+        for interval in intervals:
+            start.append(interval.start)
+            end.append(interval.end)
+        start.sort()
+        end.sort()
+        count, max_count = 0,0
+        s,e = 0,0
+        while s<len(start) and e<len(end):
+
+            if start[s] < end[e]:
+                count +=1
+                max_count = max(max_count,count)
+                s=s+1
+            else:
+                e=e+1
+                count -= 1
+        
+        return max_count
+        
