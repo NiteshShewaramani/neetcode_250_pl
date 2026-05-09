@@ -1,0 +1,17 @@
+class Solution:
+    # TC O(N) SC O(1)
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        totalGas,totalCost = sum(gas),sum(cost)
+
+        if totalGas<totalCost:
+            return -1
+
+        remainingGas , start = 0,0
+        for index in range(len(gas)):
+            remainingGas = remainingGas + (gas[index]-cost[index])
+
+            if remainingGas<0:
+                remainingGas = 0
+                start=index+1
+
+        return start

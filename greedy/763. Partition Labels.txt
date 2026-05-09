@@ -1,0 +1,21 @@
+class Solution:
+	#TC O(N) SC O(1)
+    def partitionLabels(self, s: str) -> List[int]:
+        lastIndex = {}
+        for index in range(len(s)):
+            value = s[index]
+            lastIndex[value] = index
+
+        start = 0
+        lastReachableIndex = 0
+        res=[]
+        for index in range(len(s)):
+            value = s[index]
+            lastReachableIndex = max(lastIndex[value],lastReachableIndex)
+            if index == lastReachableIndex:
+                #found a partition
+                res.append(index - start +1)
+                #next partition starts here
+                start= index+1
+        
+        return res

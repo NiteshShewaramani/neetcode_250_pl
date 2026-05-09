@@ -1,0 +1,24 @@
+class Solution:
+# TC O(N) SC O(1)
+    def checkValidString(self, s: str) -> bool:
+        minOpen , maxOpen = 0,0
+
+        for c in s:
+            if c=="(":
+                minOpen+=1
+                maxOpen+=1
+            elif c==")":
+                minOpen-=1
+                maxOpen-=1
+            else:
+                #wild card
+                minOpen-=1 #treat wild card as right bracket
+                maxOpen+=1 #treat wild card as left
+
+            if maxOpen<0:
+                #maxOpen can not be less than 0 
+                return False
+            if minOpen<0: # s= ( * ) (
+                minOpen=0
+        #at end minopen should be zero
+        return minOpen==0

@@ -1,0 +1,14 @@
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        #TC O(N) SC O(1)
+        currentEnd , currentFar , jumps = 0,0,0
+
+        for index in range(len(nums)-1):
+            currentFar = max(currentFar, index + nums[index])
+
+            if index == currentEnd:
+                jumps+=1
+                currentEnd = currentFar
+        
+        return jumps
+        
