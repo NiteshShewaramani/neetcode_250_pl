@@ -1,0 +1,29 @@
+class Solution:
+    # n = len(hand) k = groupSize
+    #Time Complexity: O(n log n)
+    #Space Complexity: O(n)
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand)%groupSize:
+            return False
+        count ={}
+        for number in hand:
+            count[number] = 1 + count.get(number,0)
+        
+        heapMin = list(count.keys())
+        heapq.heapify(heapMin)
+
+        while heapMin:
+            start = heapMin[0]
+
+            for i in range(start,start + groupSize):
+                if i not in count:
+                    return False
+                #reduce count
+                count[i] -= 1
+                if count[i] == 0:
+                    if i!=heapMin[0]:
+                        return False
+                    #pop element    
+                    heapq.heappop(heapMin)
+        
+        return True
