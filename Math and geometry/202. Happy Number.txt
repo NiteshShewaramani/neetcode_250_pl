@@ -1,0 +1,22 @@
+class Solution:
+    # Time	O(log n) base 10 Space	O(1)
+    def isHappy(self, n: int) -> bool:
+        visit = set()
+
+        while n not in visit:
+            visit.add(n)
+            n = self.sumOfSquare(n)
+            if n == 1:
+                return True
+        
+        return False
+
+    def sumOfSquare(self , n : int) -> int:
+
+        totalSum = 0
+        while n > 0:
+            remainder=n%10
+            totalSum = totalSum +  (remainder * remainder)
+            n = n // 10
+        
+        return totalSum
