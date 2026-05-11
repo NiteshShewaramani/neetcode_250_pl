@@ -1,0 +1,15 @@
+class Solution:
+    # Time Complexity = O(n * m) (length of both strings) Space Complexity = O(m) temp string storage
+    def strStr(self, haystack: str, needle: str) -> int:
+        if len(needle) > len(haystack):
+            return -1
+
+        start = 0
+
+        for j in range(len(needle)-1 , len(haystack)):
+            str1 = haystack[start:j+1]
+            if str1 == needle:
+                return start
+            start=start+1
+        
+        return -1

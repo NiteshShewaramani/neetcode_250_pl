@@ -1,0 +1,25 @@
+class Solution:
+    #TC O(N) SC O(1)
+    def compress(self, chars: List[str]) -> int:
+        ans = 0 
+        i=0
+
+        while i < (len(chars)):
+            letter = chars[i]
+            count = 0
+
+            #count consecutive occurrences of letter in input array
+            while i < len(chars) and chars[i] == letter:
+                i=i+1
+                count = count+1
+
+            # write letter to compressed array
+            chars[ans] = letter
+            ans+=1
+            if count > 1:
+                #convert count to string and iterate over each character in string
+                for c in str(count):
+                    chars[ans] = c
+                    ans+=1
+
+        return ans

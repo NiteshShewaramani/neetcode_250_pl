@@ -1,0 +1,33 @@
+from collections import Counter
+import heapq
+
+class Solution:
+    #Time O(n + k log k)
+    """
+    Let:
+    n = len(s)
+    k = number of unique characters
+    Steps:
+    Counting: O(n)
+    Heap build: O(k)
+    Heap operations: O(k log k)
+    String construction: O(n)
+
+    Space O(n)
+    """
+    def frequencySort(self, s: str) -> str:
+        # Step 1: Count frequency
+        freq = Counter(s)
+
+        # Step 2: Build max heap using negative frequency
+        heap = [(-count, char) for char, count in freq.items()]
+        heapq.heapify(heap)
+
+        # Step 3: Build result string
+        result = []
+
+        while heap:
+            count, char = heapq.heappop(heap)
+            result.append(char * (-count))
+
+        return "".join(result)
