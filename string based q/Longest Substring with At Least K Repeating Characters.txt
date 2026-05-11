@@ -1,0 +1,51 @@
+class Solution:
+    # TC O(26*n) from a to z maximun number of unique characters is 26 only
+    #SC O(26) ~ O(1)
+    def longestSubstring(self, s: str, k: int) -> int:
+        maxUniqueChars = self.getMaxUniqueCharacter(s)
+        result = 0
+
+        for curUnique in range(1 , maxUniqueChars+1):
+            mapCount = {}
+            windowStart , windowEnd , unique , countAtleastK = 0,0,0,0
+
+            while windowEnd < len(s):
+                if unique <= curUnique :
+                    currentChar = s[windowEnd]
+                    prevCount = mapCount.get(currentChar,0)
+                    if prevCount == 0:
+                        unique=unique+1
+                    mapCount[currentChar]  = prevCount + 1
+                    if mapCount[currentChar]==k:
+                        countAtleastK+=1
+                    windowEnd=windowEnd+1
+                else:
+                    #shrink the sliding window
+                    currentChar = s[windowStart]
+                    prevCount = mapCount.get(currentChar,0)
+                    if prevCount==k:
+                        countAtleastK-=1
+                    mapCount[currentChar]  = prevCount - 1
+                    if mapCount[currentChar] == 0:
+                        unique=unique-1
+                    windowStart=windowStart+1
+                
+                if unique == curUnique and unique == countAtleastK:
+                    result = max(result , windowEnd -windowStart )
+
+        return result
+
+
+    
+    # get the maximum number of unique letters in the string s
+    def getMaxUniqueCharacter(self , s:str) -> int:
+        hashmap = [False] * 26
+        local_max_unique = 0
+        
+        for c in s:
+            asciiValue = ord(c) - ord('a')
+            if not hashmap[asciiValue]:
+                hashmap[asciiValue] = True
+                local_max_unique = local_max_unique+1
+        
+        return local_max_unique

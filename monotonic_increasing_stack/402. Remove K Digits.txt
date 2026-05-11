@@ -1,0 +1,26 @@
+class Solution:
+    #Time	O(n) Space	O(n)
+    def removeKdigits(self, num: str, k: int) -> str:
+        #store int in incresing order
+        monotonicStack = []
+
+        for n in num:
+            current_no = int(n)
+
+            while monotonicStack and k>0 and current_no < monotonicStack[-1]:
+                monotonicStack.pop()
+                k=k-1
+
+            monotonicStack.append(current_no)
+
+        while k>0:
+            monotonicStack.pop()
+            k=k-1
+
+        res = []
+        for i in monotonicStack:
+            if i == 0 and len(res) == 0: 
+                continue
+            res.append(str(i))
+
+        return "".join(res) if len(res) > 0 else "0"

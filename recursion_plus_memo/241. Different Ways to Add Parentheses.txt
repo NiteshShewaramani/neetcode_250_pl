@@ -1,0 +1,45 @@
+class Solution:
+    #Time - O(n x    (2 ^ n)) - space (NxN(memo array)  x ((2 ^ n)))
+    def diffWaysToCompute(self, expression: str) -> List[int]:
+        length = len(expression)
+
+        # memo = [[]* (length+1) for _ in range(length+1)   ] 1D
+        memo = [[None  for _ in range(length + 1)] for _ in range(length + 1)] #2d list of list
+
+        def solve(start , end):
+            value = []
+
+            #This handles: 
+            #single digit
+            #2 digits
+            #any length number
+            if expression[start:end+1].isdigit():
+                value.append(int( expression[start:end+1] ))
+                return value
+            
+            # Memoized result
+            if memo[start][end] is not None:
+                return memo[start][end]
+
+            
+
+            for i in range(start,end+1):
+                c = expression[i]
+                #found a symbol split from here
+                if c in "+-*":
+                    left  = solve(start,i-1)
+                    right = solve(i+1,end)
+
+                    for l in left:
+                        for r in right:
+                            if c=="-":
+                                value.append(l-r)
+                            elif c=="+":
+                                value.append(l+r)
+                            elif c=="*":
+                                value.append(l*r)
+
+            memo[start][end] = value
+            return memo[start][end]
+        
+        return solve(0,len(expression)-1)

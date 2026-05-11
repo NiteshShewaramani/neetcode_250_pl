@@ -1,0 +1,37 @@
+class Solution:
+    #Time O(N x 26) Space O(26)
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        if len(p) > len(s):
+            return []
+        
+        countP = [0] * 26
+        res=[]
+
+        for c in p:
+            asciiValue = ord(c) - ord('a')
+            countP[asciiValue] +=1
+
+        countS = [0] * 26
+
+        def isEqual():
+            for i in range(26):
+                if countP[i] != countS[i]:
+                    return False
+            return True
+
+        L,R = 0,0
+        while R < len(s):
+            asciiValue = ord(s[R]) - ord('a')
+            countS[asciiValue] +=1
+
+            if (R-L+1) == len(p):
+                # we are in same window
+                if isEqual():
+                    res.append(L)
+
+                asciiValue = ord(s[L]) - ord('a')
+                countS[asciiValue] -=1
+                L=L+1
+            R=R+1
+                
+        return res
