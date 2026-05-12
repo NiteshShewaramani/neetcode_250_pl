@@ -1,0 +1,28 @@
+class Solution:
+    # TC O(len(w1) x len(w2)) SC O(len(w1) x len(w2)) 
+    def minDistance(self, word1: str, word2: str) -> int:
+        dp = [[-1] * len(word2) for _ in range(len(word1)) ]
+
+        def longestCommonSubsequence(pointer1 , pointer2):
+            #base case we ran out of string return 
+            if pointer1 == len(word1) or pointer2 == len(word2):
+                return 0
+
+            # if dp was precomputer so return
+            if dp[pointer1][pointer2] !=  -1:
+                return dp[pointer1][pointer2]
+
+            if word1[pointer1] == word2[pointer2]:
+                dp[pointer1][pointer2] = 1 + longestCommonSubsequence(pointer1+1,pointer2+1)
+                return dp[pointer1][pointer2]
+            else:
+                moveFirstWord  = longestCommonSubsequence(pointer1+1,pointer2)
+                moveSecondWord = longestCommonSubsequence(pointer1,pointer2+1)
+                dp[pointer1][pointer2] = max(moveFirstWord,moveSecondWord)
+                return dp[pointer1][pointer2]
+        
+        commonSubsequence = longestCommonSubsequence(0,0)
+
+        #if we remove the longest common subsequence from the length the remaining
+        #is what we need 
+        return (len(word1) + len(word2) ) - (2*commonSubsequence)
