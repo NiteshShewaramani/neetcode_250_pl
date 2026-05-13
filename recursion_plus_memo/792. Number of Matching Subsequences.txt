@@ -1,0 +1,52 @@
+from collections import defaultdict
+from bisect import bisect_right
+
+class Solution:
+    """
+    TC O(len(s) + total_characters_in_words * log n)
+    SC O(len(s) + number_of_unique_words)
+    """
+    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+
+        # preprocess positions
+        pos = defaultdict(list)
+
+        for i, ch in enumerate(s):
+            pos[ch].append(i)
+
+        memo = {}
+        ans = 0
+
+        for word in words:
+
+            # memoization
+            if word in memo:
+                ans += memo[word]
+                continue
+
+            prev = -1
+            found = True
+
+            for ch in word:
+
+                #character does not exist in string s so can't be a subsequence
+                if ch not in pos:
+                    found = False
+                    break
+
+                #contains list of index for a given character
+                indices = pos[ch]
+
+                # find smallest index > prev
+                j = bisect_right(indices, prev)
+
+                if j == len(indices):
+                    found = False
+                    break
+
+                prev = indices[j]
+
+            memo[word] = 1 if found else 0
+            ans += memo[word]
+
+        return ans
