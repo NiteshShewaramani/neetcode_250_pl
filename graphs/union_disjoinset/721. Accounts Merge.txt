@@ -1,0 +1,75 @@
+class UnionFind:
+    
+    def __init__(self,n):
+        self.parent = [i for i in range(n)]
+        self.size = [1]*n
+
+    def findParent(self,node):
+        if node == self.parent[node]:
+                return node
+
+        self.parent[node] = self.findParent(self.parent[node])
+        return self.parent[node]
+
+    def unionBySize(self,node1,node2):
+        p1 = self.findParent(node1)
+        p2 = self.findParent(node2)
+
+        #same parent
+        if p1==p2:
+            return False
+
+        if self.size[p1] < self.size[p2]:
+            self.size[p2] += self.size[p1]
+            self.parent[p1] = p2
+        else:
+            self.size[p1] += self.size[p2]
+            self.parent[p2] = p1
+        
+        return True
+
+class Solution:
+    """
+    TC =  O(n+m⋅α(n)+mlogm)
+    union find takes α(n) 
+    mlogm for sorting and building result
+    Total iterations = m (all emails) 
+    n is for initial array building 
+
+    SC = parent → O(n)
+    size → O(n)
+    emailToAccountIndex → O(m)
+    emailGroup → O(m)
+    Result list → O(m)
+    """
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+
+        n = len(accounts)
+        uF = UnionFind(n)
+        emailToAccountIndex = {} #map of email to account index
+
+        for index,accountList in enumerate(accounts):
+            #we start from index 1 bcaz index 0 is name we only want email address
+            for email in accountList[1:]:
+                if email in emailToAccountIndex:
+                    #email already exists merge account
+                    prevIndex = emailToAccountIndex[email]
+                    #merge accounts by index number
+                    uF.unionBySize(index,prevIndex)
+                else:
+                    emailToAccountIndex[email] = index
+        
+        #we have merged accounts now
+        emailGroup = defaultdict(list)
+
+        for email,index in emailToAccountIndex.items():
+            topParentIndex = uF.findParent(index)
+            #start appending or grouping all emails
+            emailGroup[topParentIndex].append(email)
+
+        res = []
+        for index , emails in emailGroup.items():
+            name = accounts[index][0]
+            res.append([name] + sorted(emails)) #array concatination
+        
+        return res
