@@ -1,0 +1,24 @@
+class Solution:
+    def shiftingLetters(self, s: str, shifts: List[int]) -> str:
+        """
+        aaa -> shifts [1,2,3]
+        baa
+        dca
+        gfd
+        TC O(N)
+        SC O(N)
+        """
+        index  = len(shifts)-1
+        postFixSum = 0
+        newCharacters = ['a'] * (len(s))
+
+        while index>=0:
+            postFixSum = postFixSum + shifts[index]
+            currentChar = s[index]
+            asciiValue = (ord(currentChar) - ord('a')) + (postFixSum % 26)
+            if asciiValue >= 26:
+                asciiValue = asciiValue - 26
+            newCharacters[index] = chr(asciiValue + ord('a'))
+            index=index-1
+
+        return "".join(newCharacters)        
