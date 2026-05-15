@@ -1,0 +1,22 @@
+class Solution:
+    #TC O(N) SCO(1)
+    def minCost(self, colors: str, neededTime: List[int]) -> int:
+        L = 0
+        R = 1
+        time = 0
+
+        while R < len(colors):
+            if colors[L] == colors[R]:
+                if neededTime[L] < neededTime[R]:
+                    time = time + neededTime[L]
+                    L = R
+                    R = R+1
+                else:
+                    time = time + neededTime[R]
+                    R=R+1
+            else:
+                #reset left to point to R now
+                L=R
+                R = R+1
+        
+        return time
