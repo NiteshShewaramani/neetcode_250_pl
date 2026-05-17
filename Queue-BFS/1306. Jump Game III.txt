@@ -1,0 +1,30 @@
+class Solution:
+    """
+    Time Complexity O(n) — each index is visited at most once.
+    Space ComplexityO(n) — for the queue and visited set.
+    """
+    def canReach(self, arr: List[int], start: int) -> bool:
+        queue = deque()
+        queue.append(start)
+        length = len(arr)
+        visited = set()
+
+        while queue:
+            index = queue.popleft()
+            if arr[index] == 0:
+                return True
+
+            if index in visited:
+                continue
+
+            visited.add(index)
+            nextIndex = index + arr[index]
+            prevIndex = index - arr[index]
+
+            if 0 <= prevIndex < length and prevIndex not in visited:
+                queue.append(prevIndex)
+
+            if 0 <= nextIndex < length and nextIndex not in visited:
+                queue.append(nextIndex)
+
+        return False
