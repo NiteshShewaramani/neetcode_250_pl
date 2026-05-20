@@ -1,0 +1,32 @@
+class Solution:
+    #time O(n) space O(n)
+    def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
+        n = len(A)
+        ans = [0] * n
+        # freq[x] stores how many times number x
+        # has appeared so far across both arrays
+        freq = [0] * (n+1)
+        # common keeps track of how many numbers
+        # are currently present in BOTH prefixes
+        common = 0
+        for i in range(n):
+
+            # Add current element from A
+            freq[A[i]] += 1
+
+            # If frequency becomes 2,
+            # it means this number appeared
+            # once in A-prefix and once in B-prefix
+            if freq[A[i]]==2:
+                common = common+1
+
+            freq[B[i]] += 1
+
+            # Same logic for B[i]
+            if freq[B[i]] == 2:
+                common = common + 1
+
+            # Store current count of common elements
+            ans[i] = common
+
+        return ans 
