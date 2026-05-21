@@ -1,0 +1,18 @@
+class Solution:
+    # time O (N) space O(1)
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        pointerA = headA
+        pointerB = headB
+
+        while pointerA != pointerB:
+            """
+            if heada is smaller it will complete first and then we will 
+            move it to headb that way we will be able to cover 
+            the difference between the two in worst and average cases
+            we will run this while loop twice
+            """
+
+            pointerA = headB if pointerA == None else pointerA.next
+            pointerB = headA if pointerB == None else pointerB.next
+        
+        return pointerA

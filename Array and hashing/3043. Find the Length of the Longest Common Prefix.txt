@@ -1,0 +1,22 @@
+class Solution:
+    #time O(len(arr) * average length of digits)
+    #space O(no of prefixes)
+    def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:
+        prefixes  = set()
+        ans = 0
+
+        # Store all prefixes from arr1
+        for n in arr1:
+            while n >0 :
+                prefixes.add(n)
+                n=n//10
+
+        # Check prefixes from arr2
+        for n in arr2:
+            while n > 0:
+                if n in prefixes:
+                    ans = max(ans, len(str(n)) )
+                    break
+                n=n//10
+
+        return ans
