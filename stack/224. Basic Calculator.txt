@@ -1,0 +1,74 @@
+class Solution:
+    """
+    Time Complexity
+O(n) → traverse string once
+Space Complexity
+O(n) → stack for parentheses
+    """
+    def calculate(self, s: str) -> int:
+        stack = [] # Stores previous results and signs before '('
+        result = 0  # Running result for current expression
+        sign = 1  # Current sign: +1 for '+', -1 for '-'
+        number = 0 # Current number being built from digits
+
+        for ch in s:
+
+            # If character is a digit, build the number
+            # Example: "123"
+            # number = 1 -> 12 -> 123
+            if ch.isdigit():
+                number = number*10 + int(ch)
+
+            if ch == '+':
+
+                # Add previous number with its sign
+                # Example: result += +5
+                result = result + (sign * number)
+
+                # Reset number for next calculation
+                number = 0
+
+                sign = 1
+            elif ch == '-':
+
+                # Add previous number with its sign
+                # Example: result += -5
+                result = result + (sign * number)
+
+                number = 0
+
+                sign = -1
+            elif ch == '(':
+
+                # Save current result before entering brackets
+                stack.append(result)
+
+                 # Save current sign before brackets
+                stack.append(sign)
+
+                # Reset for evaluating inside brackets
+                result = 0
+                sign = 1
+            elif ch == ')':
+
+                # First finish current number inside brackets
+                result = result + (sign*number)
+
+                # Stack top contains sign before '('
+                # Example: -(3+2)
+                # Multiply bracket result by -1
+                result = result * stack.pop()
+
+                # Add result calculated before '('
+                # Example: 1 + (3+2)
+                result = result + stack.pop()
+
+                # Reset number
+                number= 0
+
+        
+        # Add any remaining number after loop ends
+        # Needed because expression may end with a number
+        result = result + (sign*number)
+
+        return result
