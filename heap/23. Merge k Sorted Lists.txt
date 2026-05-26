@@ -1,0 +1,36 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    """
+    Time:
+    initally we add k node in heap k log k
+    for all n nodes we perform push and pop N log K
+    total = (N log k) + (k log k)
+    Space = O(k)
+    """
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+
+        dummy = ListNode(-1)
+        cur = dummy
+        min_heap = []
+        #define a custom comparator for listnode
+        #enabling the min_heap to prioritize nodes with smaller values 
+        ListNode.__lt__ = lambda self , other : self.val < other.val
+
+        for head in lists:
+            if head:
+                heapq.heappush(min_heap , head)
+
+        while min_heap:
+            smallest = heapq.heappop(min_heap)
+            cur.next = smallest
+            cur = cur.next
+
+            if smallest.next:
+                heapq.heappush(min_heap , smallest.next)
+
+
+        return dummy.next
