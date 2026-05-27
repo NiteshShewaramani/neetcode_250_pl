@@ -1,0 +1,63 @@
+class Solution:
+    #Time O(N + 26) 2 pass
+    #Space O(1) constant
+    def numberOfSpecialChars(self, word: str) -> int:
+        lastLower  = [-1] * 26
+        firstUpper = [-1] * 26
+
+        for i,c in enumerate(word):
+            if 'a' <= c <='z':
+                ascii_v = ord(c) - ord('a') 
+
+                lastLower[ascii_v] = i
+            else:
+                #upper case
+                ascii_v = ord(c) - ord('A')
+                if  firstUpper[ascii_v] == -1:
+                    firstUpper[ascii_v] = i
+
+
+        #second pass
+        count = 0
+
+        for i in range(26):
+            if lastLower[i] != -1 and lastLower[i] < firstUpper[i]:
+                count = count +   1
+            
+        
+        return count
+
+class Solution:
+    #Time O(N + N) 2 pass
+    #Space O(1) constant
+    def numberOfSpecialChars(self, word: str) -> int:
+        lastIndexOfLowerCase = [-1] * 26
+
+        for i,c in enumerate(word):
+            ascii_v = ord(c) - ord('a')
+
+            if ascii_v >= 0: 
+                lastIndexOfLowerCase[ascii_v] = i
+
+        
+        
+        #second pass
+        count = 0
+
+        for i,c in enumerate(word):
+            ascii_v = ord(c) - ord('A')
+
+            if ascii_v >= 0 and ascii_v<26:
+                lastIndex =  lastIndexOfLowerCase[ascii_v]
+                #all lower case chars are before this 
+                if lastIndex != -1 and lastIndex < i:
+                    count = count+1
+                    #update to -1 so that we don't use it again
+                    lastIndexOfLowerCase[ascii_v] = -1
+                elif lastIndex > i :
+                    #update to -1 so that we don't use it again
+                    #example test case "cCceDC"
+                    lastIndexOfLowerCase[ascii_v] = -1
+
+        
+        return count        

@@ -1,0 +1,28 @@
+from collections import deque
+class Solution:
+    # Time: O(N log N)
+    # Space: O(N)
+    def overlapInt(self, arr):
+        start = sorted([s for s, e in arr])
+        end = sorted([e for s, e in arr])
+
+        i = 0
+        j = 0
+
+        noOfIntervals = 0
+        maxIntervals = 0
+
+        while i < len(arr):
+
+            # new interval starts before old one ends
+            if start[i] <= end[j]:
+                noOfIntervals += 1
+                maxIntervals = max(maxIntervals, noOfIntervals)
+                i += 1
+
+            else:
+                # interval ended
+                noOfIntervals -= 1
+                j += 1
+
+        return maxIntervals
