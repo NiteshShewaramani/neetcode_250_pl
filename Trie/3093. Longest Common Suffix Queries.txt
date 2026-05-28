@@ -1,0 +1,128 @@
+"""
+Build Trie: O(N)
+Queries:    O(M)
+
+Total: O(N + M)
+Space O (N)
+"""
+
+class TrieNode:
+    def __init__(self):
+
+        # stores next characters
+        self.children = {}
+
+        # best_index:
+        # index of the best word for this node
+        #
+        # "best" means:
+        #   1. shortest length
+        #   2. if same length -> smaller index
+        self.best_index = -1
+
+        # length of best word
+        self.best_len = float('inf')
+
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def update_best(self, node, word_len, idx):
+        """
+        Update node's best answer.
+
+        We store the shortest word that reaches this node.
+
+        If lengths are equal,
+        choose the smaller index.
+        """
+
+        # found smaller length word
+        if word_len < node.best_len:
+            node.best_len = word_len
+            node.best_index = idx
+
+        # same length -> smaller index wins
+        elif word_len == node.best_len and idx < node.best_index:
+            node.best_index = idx
+
+    def insert(self, word, idx):
+
+        # start from root
+        node = self.root
+
+        word_len = len(word)
+
+        # root should also know the globally best word
+        # useful when query has no matching suffix
+        self.update_best(node, word_len, idx)
+
+        # IMPORTANT:
+        # we insert reversed word
+        #
+        # because:
+        # suffix matching becomes prefix matching
+        #
+        # example:
+        #   "running"  -> "gninnur"
+        #   "jogging"  -> "gniggoj"
+        #
+        # common suffix becomes common prefix after reverse
+        for ch in reversed(word):
+
+            # create node if character not present
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+
+            # move to next node
+            node = node.children[ch]
+
+            # every node stores the best word
+            # passing through it
+            self.update_best(node, word_len, idx)
+
+    def query(self, word):
+
+        # start traversal from root
+        node = self.root
+
+        # traverse reversed query
+        #
+        # because trie stores reversed words
+        for ch in reversed(word):
+
+            # if character missing,
+            # suffix match breaks here
+            if ch not in node.children:
+                break
+
+            # move deeper
+            node = node.children[ch]
+
+        # node now represents:
+        # longest matched suffix
+        #
+        # return best word index stored there
+        return node.best_index
+
+
+class Solution:
+    def stringIndices(self, wordsContainer, wordsQuery):
+
+        # create trie
+        trie = Trie()
+
+        # insert all container words
+        for i, word in enumerate(wordsContainer):
+            trie.insert(word, i)
+
+        ans = []
+
+        # process each query
+        for query_word in wordsQuery:
+
+            # get best matching word index
+            ans.append(trie.query(query_word))
+
+        return ans
