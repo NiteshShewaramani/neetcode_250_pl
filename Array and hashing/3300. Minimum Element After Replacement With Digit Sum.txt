@@ -1,0 +1,12 @@
+class Solution:
+    #time O(N x average length of a number) space O(1)
+    def minElement(self, nums: List[int]) -> int:
+        min_element = float("inf")
+        for n in nums:
+            word = str(n)
+            current_sum = 0
+            for c in word:
+                current_sum= current_sum + int(c)
+            min_element=min(min_element,current_sum)
+        
+        return min_element
