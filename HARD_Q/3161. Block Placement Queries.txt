@@ -1,0 +1,177 @@
+from sortedcontainers import SortedList
+import itertools
+
+
+class FenwickTree:
+    """
+    Normally a Fenwick Tree (BIT) stores prefix sums.
+
+    Here we modify it to store PREFIX MAXIMUMS.
+
+    We store:
+        gap_length at the gap's RIGHT endpoint.
+
+    Example:
+
+        obstacles = [0, 4, 10]
+
+        gap [0,4]   => length 4
+        gap [4,10]  => length 6
+
+        store:
+            position 4  -> 4
+            position 10 -> 6
+
+    query(x) returns:
+
+        largest gap whose right endpoint <= x
+
+    Both update/query are O(log N).
+    """
+
+    def __init__(self, n):
+        self.bit = [0] * (n + 1)
+
+    def update(self, idx, val):
+        """
+        Update all Fenwick ranges containing idx.
+
+        Since we need prefix maximum instead of prefix sum,
+        we use max().
+        """
+        while idx < len(self.bit):
+            self.bit[idx] = max(self.bit[idx], val)
+            idx += idx & -idx
+
+    def query(self, idx):
+        """
+        Returns:
+
+            maximum stored gap
+            with right endpoint <= idx
+        """
+        res = 0
+
+        while idx > 0:
+            res = max(res, self.bit[idx])
+            idx -= idx & -idx
+
+        return res
+
+
+class Solution:
+    def getResults(self, queries: list[list[int]]) -> list[bool]:
+
+        # Constraints guarantee coordinates <= 50000
+        MAX_X = 50000
+
+        # --------------------------------------------------
+        # Build the FINAL obstacle configuration.
+        #
+        # We process queries backwards.
+        # Therefore we first insert every obstacle that
+        # ever appears.
+        # --------------------------------------------------
+        obstacles = SortedList([0, MAX_X])
+
+        for q in queries:
+            if q[0] == 1:
+                obstacles.add(q[1])
+
+        # Fenwick stores:
+        # right_endpoint -> gap_length
+        bit = FenwickTree(MAX_X + 1)
+
+        # --------------------------------------------------
+        # Build all gaps in the final state.
+        #
+        # Example:
+        #
+        # obstacles:
+        # 0, 4, 10
+        #
+        # gaps:
+        # [0,4] length 4
+        # [4,10] length 6
+        #
+        # store:
+        # endpoint 4  -> 4
+        # endpoint 10 -> 6
+        # --------------------------------------------------
+        for left, right in itertools.pairwise(obstacles):
+            bit.update(right, right - left)
+
+        answers = []
+
+        # ==================================================
+        # Process queries in reverse
+        # ==================================================
+        for q in reversed(queries):
+
+            # ----------------------------------------------
+            # Type 1: insert obstacle x
+            #
+            # In reverse:
+            # remove obstacle x
+            # ----------------------------------------------
+            if q[0] == 1:
+
+                x = q[1]
+
+                idx = obstacles.index(x)
+
+                prev_obstacle = obstacles[idx - 1]
+                next_obstacle = obstacles[idx + 1]
+
+                # Before removing:
+                #
+                # prev ---- x ---- next
+                #
+                # After removing:
+                #
+                # prev ----------- next
+                #
+                # New merged gap length:
+                merged_gap = next_obstacle - prev_obstacle
+
+                # Store the merged gap
+                bit.update(next_obstacle, merged_gap)
+
+                obstacles.remove(x)
+
+            # ----------------------------------------------
+            # Type 2 query
+            # ----------------------------------------------
+            else:
+
+                _, x, size = q
+
+                # Find obstacle immediately before x
+                idx = obstacles.bisect_right(x)
+
+                prev_obstacle = obstacles[idx - 1]
+
+                # ------------------------------------------
+                # Complete gaps completely inside [0,x]
+                #
+                # Their right endpoint <= prev_obstacle
+                # ------------------------------------------
+                best_gap = bit.query(prev_obstacle)
+
+                # ------------------------------------------
+                # Partial gap containing x
+                #
+                # prev_obstacle -------- x
+                # ------------------------------------------
+                tail_gap = x - prev_obstacle
+
+                largest_available_segment = max(
+                    best_gap,
+                    tail_gap
+                )
+
+                answers.append(
+                    largest_available_segment >= size
+                )
+
+        return answers[::-1]
