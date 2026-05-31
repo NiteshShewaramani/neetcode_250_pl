@@ -1,0 +1,12 @@
+class Solution:
+    #Time NlogN Space 1
+    def asteroidsDestroyed(self, mass: int, asteroids: List[int]) -> bool:
+        asteroids.sort()
+
+        for m in asteroids:
+            if mass < m:
+                return False
+            
+            mass = mass + m
+
+        return True
