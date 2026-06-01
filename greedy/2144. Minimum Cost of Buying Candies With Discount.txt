@@ -1,0 +1,22 @@
+class Solution:
+    # TC O(NlogN) SC O(1) 
+    def minimumCost(self, cost: List[int]) -> int:
+        cost.sort()
+        totalCost = 0
+
+        index = len(cost)-1
+        count=0
+
+        while index >= 0:
+            #we are on third candy
+            if count == 2:
+                count=0
+                index -= 1
+                continue
+
+
+            totalCost += cost[index]
+            count += 1
+            index -= 1
+        
+        return totalCost
