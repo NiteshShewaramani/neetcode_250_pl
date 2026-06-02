@@ -1,0 +1,22 @@
+class Solution:
+    #Space O(1) Time O(N+M)
+    def earliestFinishTime(self, landStartTime: List[int], landDuration: List[int], waterStartTime: List[int], waterDuration: List[int]) -> int:
+
+        def cal(firstStartTime , firstEndTime , secondStartTime , secondEndTime):
+
+            min_first_time = float('inf')
+            #take minimum of first value
+            for s,d in zip(firstStartTime , firstEndTime):
+                min_first_time = min(min_first_time , s+ d)
+
+            ans = float('inf')
+            for s,d in zip(secondStartTime , secondEndTime):
+                currentV = max(min_first_time , s) + d
+                ans= min(ans, currentV)
+
+            return ans
+
+        land_then_water = cal(landStartTime, landDuration, waterStartTime, waterDuration)
+        water_then_land = cal(waterStartTime, waterDuration, landStartTime, landDuration)
+        
+        return min(land_then_water,water_then_land)
