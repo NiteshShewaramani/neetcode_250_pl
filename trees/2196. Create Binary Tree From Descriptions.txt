@@ -1,0 +1,21 @@
+class Solution:
+    #Time: O(N) where N = len(descriptions)
+    #Space: O(N) for the hashmap and child set
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        children = set()
+        nodes = {}
+
+        # Get existing node or create a new one
+        for rootv,childv,isLeft in descriptions:
+            parentNode = nodes.setdefault(rootv  , TreeNode(rootv)  )
+            childNode  = nodes.setdefault(childv , TreeNode(childv) )     
+            children.add(childv)
+            if isLeft == 1:
+                parentNode.left = childNode
+            else:
+                parentNode.right = childNode
+
+        # Root = node that never appeared as a child
+        for node in nodes:
+            if node not in children:
+                return nodes[node]
