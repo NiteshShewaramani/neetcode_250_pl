@@ -1,0 +1,28 @@
+class Solution:
+    #Time O(N + N) Space O(N)
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        smaller = deque() 
+        greater = deque()
+        pivotC=0
+
+        for n in nums:
+            if n < pivot:
+                smaller.append(n)
+            elif n > pivot:
+                greater.append(n)
+            else:
+                pivotC+=1
+
+        ans = []
+        while smaller:
+            el = smaller.popleft()
+            ans.append(el)
+        while pivotC>0:
+            ans.append(pivot)
+            pivotC -=1
+        
+        while greater:
+            el = greater.popleft()
+            ans.append(el)
+
+        return ans
