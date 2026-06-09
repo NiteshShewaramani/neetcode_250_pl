@@ -1,0 +1,6 @@
+class Solution:
+    #Time O (N) Space O(1)
+    def maxTotalValue(self, nums: List[int], k: int) -> int:
+        nMax  = max(nums)
+        nMin  = min(nums)
+        return (nMax - nMin)*k
