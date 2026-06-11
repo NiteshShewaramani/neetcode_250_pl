@@ -1,0 +1,35 @@
+class Solution:
+    """
+    Complexity
+    Building graph: O(n)
+    DFS: O(n)
+    Modular exponentiation: O(log n)
+    Total: O(n) time, O(n) space.
+    """
+    def assignEdgeWeights(self, edges: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        MOD = 10**9 + 7
+
+        for u,v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+
+        
+        max_depth=0
+        n = len(edges) + 1
+        
+        def dfs(node,visited,cur_depth):
+            nonlocal max_depth
+            visited[node]=1
+            max_depth = max(max_depth,cur_depth)
+            
+            for neighbour in adj[node]:
+                if visited[neighbour]==0:
+                    dfs(neighbour  , visited , cur_depth+1)
+
+
+        visited = [0] * (n+1)
+        dfs(1,visited,0)
+
+        #print(max_depth)
+        return (2 ** (max_depth-1)) % MOD
