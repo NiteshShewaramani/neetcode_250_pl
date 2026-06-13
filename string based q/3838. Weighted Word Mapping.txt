@@ -1,0 +1,17 @@
+class Solution:
+    #Time O(N x M)
+    #N is no of words , M is average length of word
+    #Space O(1) not counting output space
+    def mapWordWeights(self, words: List[str], weights: List[int]) -> str:
+        ans=[]
+
+        for word in words:
+            weightSum = 0
+            for char in word:
+
+                weightSum +=  weights[(ord(char) - 97)]
+                weightSum = weightSum % 26
+            
+            ans.append(chr((25- weightSum) + 97))
+        
+        return "".join(ans)
