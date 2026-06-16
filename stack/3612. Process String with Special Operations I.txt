@@ -1,0 +1,25 @@
+class Solution:
+    #Time O(N x M) N is size of chars and M is no of times we run opertations 
+    #Space O(N)
+    def processStr(self, s: str) -> str:
+        stack = []
+
+        for c in s:
+            if c == '*':
+                if len(stack) >= 1:
+                    el = stack.pop()
+                    #print(f'removing {el} ')
+            elif c =='#':
+                size = len(stack)
+                #duplicate the element
+                for i in range(0,size):
+                    el = stack[i]
+                    stack.append(el)
+                    #print(f'adding duplicates {el} ')
+            elif c =='%':
+                stack = stack[::-1]
+            else :
+                #print(f'adding {c} ')
+                stack.append(c)
+        
+        return "".join(stack)
