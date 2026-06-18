@@ -1,0 +1,41 @@
+class Solution:
+    """
+    Complexity
+    Time: O(1)
+    Space: O(1)
+    """
+    def angleClock(self, hour: int, minutes: int) -> float:
+        # Minute hand:
+        # A full circle is 360 degrees and the minute hand
+        # completes it in 60 minutes.
+        # So it moves 360 / 60 = 6 degrees per minute.
+        minute_angle = minutes * 6
+        # Hour hand:
+        # A full circle is 360 degrees and there are 12 hours.
+        # So it moves 360 / 12 = 30 degrees per hour.
+        #
+        # Example:
+        # At 3:00 -> 3 * 30 = 90 degrees.
+        #
+        # The hour hand does NOT stay fixed between hours.
+        # It keeps moving as minutes pass.
+        #
+        # Since it moves 30 degrees in 60 minutes,
+        # it moves 30 / 60 = 0.5 degrees per minute.
+        #
+        # Example:
+        # At 3:15:
+        # base position = 3 * 30 = 90
+        # extra movement = 15 * 0.5 = 7.5
+        # total = 97.5 degrees
+        hour_angle = (hour % 12) * 30 + minutes * 0.5
+
+        # Raw angle difference between the two hands.
+        diff = abs(hour_angle - minute_angle)
+
+        # Two angles are formed between the hands:
+        # 1. diff
+        # 2. the remaining part of the circle = 360 - diff
+        #
+        # We need the smaller angle.
+        return min(diff , 360 - diff)
