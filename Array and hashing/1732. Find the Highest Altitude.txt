@@ -1,0 +1,10 @@
+class Solution:
+    #time O(N) space O(1)
+    def largestAltitude(self, gain: List[int]) -> int:
+        high = 0
+        curSum = 0
+        for n in gain:
+            curSum = curSum + n
+            high = max(high , curSum)
+
+        return high
