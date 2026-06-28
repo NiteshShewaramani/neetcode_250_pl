@@ -1,0 +1,17 @@
+class Solution:
+    #Time NlogN Space O(1)
+    def maximumElementAfterDecrementingAndRearranging(self, arr: List[int]) -> int:
+        arr.sort()
+        j=1
+        arr[0]=1
+
+        while j<len(arr):
+            if arr[j] - arr[j-1] <= 1:
+                pass
+                #we are okay
+            else:
+                #we are not okay
+                arr[j] = arr[j-1]+1
+            j=j+1
+        
+        return arr[-1]
