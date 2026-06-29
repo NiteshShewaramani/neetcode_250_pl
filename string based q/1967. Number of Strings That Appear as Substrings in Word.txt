@@ -1,0 +1,13 @@
+class Solution:
+    #total time O(n *  (m+k)) 
+    #space O(1)
+    def numOfStrings(self, patterns: List[str], word: str) -> int:
+        ans=0
+        #n = len(patterns)
+        for w in patterns:
+            #m = len(word)
+            #k = average length of a pattern (or len(w) for each pattern)
+            if w in word :
+                ans=ans+1
+
+        return ans
