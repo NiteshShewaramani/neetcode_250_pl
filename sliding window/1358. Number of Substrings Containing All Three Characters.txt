@@ -1,0 +1,30 @@
+class Solution:
+    def numberOfSubstrings(self, s: str) -> int:
+        """
+        Sliding window 
+            //we take the last minimum orcurance to count no of substrings
+            //example aaabc 
+            //the last minimum occurance of a is 2 , b is 3 and c is 4 
+            //so the min is 2 + 1 = 3 should be our answer we bacially need to see
+            //whats the minimum index before we get all abc
+            Time O(N) Space O(1) 
+        """
+        lastIndexa=-1
+        lastIndexb=-1
+        lastIndexc=-1
+        R=0
+        total = 0
+
+        while R < len(s):
+            if s[R]=='a':
+                lastIndexa=R
+            elif s[R]=='b':
+                lastIndexb=R
+            elif s[R]=='c':
+                lastIndexc=R
+            
+            if lastIndexa>=0 and lastIndexb>=0 and lastIndexc>=0:
+                total = total + min(lastIndexa,lastIndexb,lastIndexc)+1 
+            R=1+R
+        
+        return total
