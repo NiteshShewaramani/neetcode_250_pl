@@ -1,0 +1,35 @@
+class Solution:
+    # Time Complexity: O(nm log(nm))
+    # Space Complexity:  O(nm)
+    def findSafeWalk(self, grid: List[List[int]], health: int) -> bool:
+        n = len(grid)
+        m = len(grid[0])
+        pqueue = []
+        
+        if grid[0][0]==1:
+            health = health-1
+            
+        heapq.heappush(pqueue, (-health, 0 , 0 ) )
+        directions = [(1,0),(0,1),(-1,0),(0,-1)]
+        best = [[-1] * m for _ in range(n)]
+        best[0][0] = health
+
+        while pqueue:
+            remainingH , i, j = heapq.heappop(pqueue)
+            remainingH = -remainingH
+
+            if i==n-1 and j==m-1 and remainingH>=1:
+                return True
+
+            for x,y in directions:
+                nx = x+i
+                ny = y+j
+
+                if 0 <= nx < n and 0 <= ny < m:
+                    newHealth = remainingH - grid[nx][ny]
+
+                    if newHealth >= 1 and newHealth > best[nx][ny]:
+                        best[nx][ny] = newHealth
+                        heapq.heappush(pqueue, (-newHealth, nx, ny))
+        
+        return False    
