@@ -1,0 +1,68 @@
+from collections import deque
+from typing import List
+
+class Solution:
+    """
+    Topological sort: O(n + m)
+Each feasibility check: O(n + m)
+Binary search: O(log W), where W is the maximum edge weight.
+    """
+    def findMaxPathScore(self, edges: List[List[int]], online: List[bool], k: int) -> int:
+        n = len(online)
+
+        graph = [[] for _ in range(n)]
+        indegree = [0] * n
+        max_weight = 0
+
+        for u, v, w in edges:
+            graph[u].append((v, w))
+            indegree[v] += 1
+            max_weight = max(max_weight, w)
+
+        # Topological order (graph is a DAG)
+        q = deque(i for i in range(n) if indegree[i] == 0)
+        topo = []
+
+        while q:
+            u = q.popleft()
+            topo.append(u)
+            for v, _ in graph[u]:
+                indegree[v] -= 1
+                if indegree[v] == 0:
+                    q.append(v)
+
+        def check(limit):
+            INF = float('inf')
+            dp = [INF] * n
+            dp[0] = 0
+
+            for u in topo:
+                if dp[u] == INF:
+                    continue
+
+                # Cannot stand on an offline intermediate node
+                if u != 0 and u != n - 1 and not online[u]:
+                    continue
+
+                for v, w in graph[u]:
+                    if w < limit:
+                        continue
+                    if v != n - 1 and not online[v]:
+                        continue
+
+                    dp[v] = min(dp[v], dp[u] + w)
+
+            return dp[-1] <= k
+
+        lo, hi = 0, max_weight
+        ans = -1
+
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                ans = mid
+                lo = mid + 1
+            else:
+                hi = mid - 1
+
+        return ans
