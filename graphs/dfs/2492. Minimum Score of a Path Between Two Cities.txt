@@ -1,0 +1,34 @@
+class Solution:
+    #n is nof of cities
+    #m is no of roads
+    #Time Complexity: O(n + m)
+    #Space Complexity: O(n + m) (including the adjacency list and recursion stack)
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        #bcaz of testcases
+        minAns = 100000
+        graph = defaultdict(list)
+
+        #Time: O(m) space:O(n + m)
+        for i in range(len(roads)):
+            u,v,w = roads[i]
+            graph[u].append((v,w))
+            graph[v].append((u,w))
+
+        
+        #we traverse each node max once
+        #Space O(n)
+        visited = [-1] * (n+1)
+        def dfs(current):
+            nonlocal minAns
+            visited[current] = 1
+
+            for node,w in graph.get(current):
+                # consider every edge even if node was visited earlier
+                minAns = min(w,minAns)
+                if visited[node] == -1:
+                    dfs(node)
+
+        #start is 1
+        #Time: O(n+ m)   Space: O(n)
+        dfs(1)
+        return minAns
