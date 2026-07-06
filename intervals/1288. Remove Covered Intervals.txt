@@ -1,0 +1,19 @@
+class Solution:
+    #time O(nlogn)
+    #space O(n) - sorting
+    def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key=lambda x: (x[0], -x[1]))
+        #x[0] start , x[1] is end
+        #Sort by start in ascending order.
+        #If two intervals have the same start, 
+        #sort by end in descending order (because of the negative sign).
+
+        count = 0
+        max_end = 0
+
+        for start, end in intervals:
+            if end > max_end:
+                count += 1
+                max_end = end
+
+        return count
