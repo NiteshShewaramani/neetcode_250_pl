@@ -1,0 +1,32 @@
+class Solution:
+    #time O(d) d is no of digits , Space O(1)
+    def sumAndMultiply(self, n: int) -> int:
+        # If the number is 0, there are no non-zero digits.
+        if n == 0:
+            return 0
+
+        digit_sum = 0   # Stores the sum of all non-zero digits.
+        new_num = 0     # Stores the number formed after removing zeros.
+        place = 1       # Tracks the current place value (1, 10, 100, ...).
+
+        # Process the number from right to left.
+        while n > 0:
+            digit = n % 10      # Extract the last digit.
+
+            if digit != 0:
+                # Add the non-zero digit to the sum.
+                digit_sum += digit
+
+                # Append the digit to the new number at the correct place value.
+                # Since we're processing from right to left, the original order
+                # of the non-zero digits is preserved.
+                new_num += digit * place
+
+                # Move to the next place value.
+                place *= 10
+
+            # Remove the last digit from the number.
+            n //= 10
+
+        # Return the product of the new number and the sum of its digits.
+        return new_num * digit_sum
