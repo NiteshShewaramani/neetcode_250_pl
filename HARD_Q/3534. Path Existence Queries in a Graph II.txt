@@ -1,0 +1,70 @@
+from typing import List
+"""
+Complexity:
+Sorting: O(n log n)
+Building nxt: O(n)
+Building binary lifting table: O(n log n)
+Each query: O(log n)
+Total: O(n log n + q log n)
+Space: O(n log n)
+"""
+class Solution:
+    def pathExistenceQueries(
+        self, n: int, nums: List[int], maxDiff: int, queries: List[List[int]]
+    ) -> List[int]:
+        order = sorted((nums[i], i) for i in range(n))
+        vals = [x for x, _ in order]
+
+        # original index -> position in sorted order
+        pos = [0] * n
+        for i, (_, idx) in enumerate(order):
+            pos[idx] = i
+
+        # component id in sorted order
+        comp = [0] * n
+        for i in range(1, n):
+            comp[i] = comp[i - 1] + (vals[i] - vals[i - 1] > maxDiff)
+
+        # nxt[i] = farthest sorted position reachable from i in one step
+        nxt = [0] * n
+        r = 0
+        for i in range(n):
+            while r + 1 < n and vals[r + 1] - vals[i] <= maxDiff:
+                r += 1
+            nxt[i] = r
+
+        # binary lifting on the "greedy jump" function
+        LOG = n.bit_length()
+        up = [nxt]
+        for _ in range(1, LOG):
+            prev = up[-1]
+            cur = [0] * n
+            for i in range(n):
+                cur[i] = prev[prev[i]]
+            up.append(cur)
+
+        ans = []
+
+        for u, v in queries:
+            l, r = pos[u], pos[v]
+            if l > r:
+                l, r = r, l
+
+            if l == r:
+                ans.append(0)
+                continue
+
+            if comp[l] != comp[r]:
+                ans.append(-1)
+                continue
+
+            steps = 0
+            cur = l
+            for k in range(LOG - 1, -1, -1):
+                if up[k][cur] < r:
+                    cur = up[k][cur]
+                    steps += 1 << k
+
+            ans.append(steps + 1)
+
+        return ans
