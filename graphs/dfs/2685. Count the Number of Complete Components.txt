@@ -1,0 +1,40 @@
+class Solution:
+    # time O(V + E) V+E for dfs
+    # spave O(V + E) 
+    def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
+        graph = defaultdict(list)
+
+        for u,v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        visited = [False] * n
+        complete_components = 0
+        def dfs(node):
+            # Mark current node as visited
+            visited[node] = True
+
+            nodes = 1
+
+            currentedges = len(graph[node])
+
+             # Visit all unvisited neighbors
+            for neighbour in graph[node]:
+                if not visited[neighbour]:
+                    childnodes , childedges = dfs(neighbour)
+                    nodes = nodes + childnodes
+                    currentedges = currentedges + childedges
+            return nodes , currentedges
+        
+        count = 0
+        for i in range(n):
+            if not visited[i]:
+
+                childnodes , currentedges    = dfs(i)
+                currentedges = currentedges // 2 #bcaz this is undirected graph edges coutned twice
+                requirededges = childnodes *  (childnodes-1)//2
+
+                if requirededges == currentedges:
+                    complete_components = complete_components + 1
+
+        return complete_components
