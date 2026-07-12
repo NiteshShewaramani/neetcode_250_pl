@@ -1,0 +1,27 @@
+class Solution:
+    """
+    Time O (N + KlogK) where K is no of unique elemnets in map
+    Space O(N) for map + O(N) for another sorted map 
+    """
+    def arrayRankTransform(self, arr: List[int]) -> List[int]:
+        ans = [0] * len(arr)
+        value_to_index_map = defaultdict(list)
+
+        for i in range(len(arr)):
+            v = arr[i]
+            value_to_index_map[v].append(i)
+
+        sortedmap = dict(sorted(value_to_index_map.items()))
+
+        rank = 1
+
+        for key,values in sortedmap.items():
+            
+            for index in values:
+                # assign similar rank to similar elements
+                ans[index]  = rank
+            
+            rank = rank+1
+
+
+        return ans
