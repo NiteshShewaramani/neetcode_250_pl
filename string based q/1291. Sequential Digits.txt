@@ -1,0 +1,42 @@
+class Solution:
+    # Time Complexity: O(1)  8(no of length 2) + 7(no of length 3) + 6 + 5 + 4 + 3 + 2 + 1 = 36
+    # Space Complexity O(1)
+    def sequentialDigits(self, low: int, high: int) -> List[int]:
+        # String containing all digits in increasing order.
+        # Every sequential number is simply a contiguous substring of this string.
+        # Examples:
+        # "12"      -> 12
+        # "456"     -> 456
+        # "6789"    -> 6789
+        digits = "123456789"
+
+        ans = []
+
+        # Try every possible length of a sequential number.
+        # Minimum length is 2 (12, 23, ...)
+        # Maximum length is 9 (123456789)
+        for length in range(2,10):
+            # For a fixed length, slide a window over the digits string.
+            #
+            # Example: length = 3
+            # digits = "123456789"
+            #
+            # start = 0 -> "123"
+            # start = 1 -> "234"
+            # start = 2 -> "345"
+            # ...
+            # start = 6 -> "789"
+            #
+            # There are (9 - length + 1) possible substrings.
+            # Since range's end is exclusive, we use (10 - length).
+            for start in range(10 - length):
+                # Extract the current substring and convert it to an integer.
+                num = int(digits[start : start+length])
+
+                # Keep only numbers that fall inside the required range.
+                if low <= num <= high:
+                    ans.append(num)
+
+        # Numbers are generated in increasing order,
+        # so no sorting is required.
+        return ans
