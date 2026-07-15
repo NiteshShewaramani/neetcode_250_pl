@@ -1,0 +1,8 @@
+class Solution:
+    def gcdOfOddEvenSums(self, n: int) -> int:
+        newN = n*2
+        totalSum = (newN*(newN+1)) // 2
+        oddSum = (totalSum-n) // 2
+        evenSum = oddSum + n
+        # built in function O(log(min(a, b))) Time and O(1) Space
+        return math.gcd(oddSum , evenSum)
