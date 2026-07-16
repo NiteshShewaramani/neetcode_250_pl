@@ -1,0 +1,26 @@
+class Solution:
+    #Time (nlogn for sorting) + () n x log(min(a,b)) ) + ( n/2 x  log(min(a,b))  )
+    #Space O(n) for gcdlist
+    def gcdSum(self, nums: list[int]) -> int:
+        gcdlist = []
+        maxi = 0
+
+        for j in range(len(nums)):
+            if nums[j] >= maxi:
+                gcdlist.append(nums[j])
+                maxi = nums[j]
+            else:
+                newgcd = math.gcd(nums[j] , maxi)
+                gcdlist.append(newgcd)
+        
+        #sort the list
+        gcdlist.sort()
+        finalSum = 0
+        start = 0 
+        end = len(gcdlist)-1
+        while start < end:
+            finalSum = finalSum + math.gcd(gcdlist[start] , gcdlist[end] )
+            start+=1
+            end-=1
+        
+        return finalSum
