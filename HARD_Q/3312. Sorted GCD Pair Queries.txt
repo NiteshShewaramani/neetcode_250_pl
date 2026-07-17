@@ -1,0 +1,97 @@
+class Solution:
+    """
+    Time: O(N + M log M + Q log M)
+    Space:O(M)
+    """
+    def gcdValues(self, nums: List[int], queries: List[int]) -> List[int]:
+        # ----------------------------------------------------------
+        # max value present in nums
+        # ----------------------------------------------------------
+        MAX = max(nums)
+
+        # ----------------------------------------------------------
+        # freq[x] = how many times value x appears
+        # ----------------------------------------------------------
+        freq = [0] * (MAX + 1)
+        for x in nums:
+            freq[x] += 1
+
+        # ----------------------------------------------------------
+        # divisible[g] =
+        # number of elements divisible by g
+        #
+        # We compute this by iterating over multiples of g.
+        #
+        # Complexity:
+        # MAX/1 + MAX/2 + MAX/3 + ...
+        # = MAX * log(MAX)
+        # ----------------------------------------------------------
+        divisible = [0] * (MAX + 1)
+
+        for g in range(1, MAX + 1):
+            for multiple in range(g, MAX + 1, g):
+                divisible[g] += freq[multiple]
+
+        # ----------------------------------------------------------
+        # exact[g] =
+        # number of pairs having gcd exactly g
+        #
+        # Initially:
+        # choose(divisible[g],2)
+        # counts all pairs whose gcd is a multiple of g.
+        #
+        # We subtract larger multiples to obtain
+        # gcd == g.
+        #
+        # This is classic inclusion-exclusion.
+        # ----------------------------------------------------------
+        exact = [0] * (MAX + 1)
+
+        for g in range(MAX, 0, -1):
+
+            cnt = divisible[g]
+
+            # total pairs divisible by g
+            pairs = cnt * (cnt - 1) // 2
+
+            # remove pairs whose gcd is
+            # 2g,3g,4g,...
+            multiple = 2 * g
+            while multiple <= MAX:
+                pairs -= exact[multiple]
+                multiple += g
+
+            exact[g] = pairs
+
+        # ----------------------------------------------------------
+        # prefix[g] =
+        # number of pairs whose gcd <= g
+        #
+        # This lets us binary search the answer.
+        # ----------------------------------------------------------
+        prefix = [0] * (MAX + 1)
+
+        running = 0
+        for g in range(1, MAX + 1):
+            running += exact[g]
+            prefix[g] = running
+
+        # ----------------------------------------------------------
+        # For each query:
+        #
+        # queries[i] is 0-indexed.
+        #
+        # We need the (query+1)-th smallest gcd.
+        #
+        # prefix stores cumulative counts,
+        # therefore upper_bound(query)
+        # gives first gcd whose cumulative
+        # count exceeds query.
+        # ----------------------------------------------------------
+        ans = []
+
+        for k in queries:
+            ans.append(bisect_right(prefix, k))
+
+        return ans
+        
