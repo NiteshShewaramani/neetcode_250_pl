@@ -1,0 +1,5 @@
+class Solution:
+    #time log(min(a,b)) + time for min function and time for max function
+    #Space O(1)
+    def findGCD(self, nums: List[int]) -> int:
+        return math.gcd(max(nums) , min(nums))
