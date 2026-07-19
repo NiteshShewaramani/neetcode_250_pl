@@ -1,0 +1,29 @@
+class Solution:
+    """
+    Time: O(n) Each character is pushed and popped at most once.
+    Space: O(26) (or O(k) for the number of distinct characters),
+    effectively O(1) for lowercase English letters.
+    """
+    def smallestSubsequence(self, s: str) -> str:
+        count = Counter(s)
+        visited = set()
+        st = []
+
+        for ch in s:
+            # We're processing this occurrence, so one less remains.
+            count[ch] -= 1
+
+            # Skip if we've already included this character.
+            if ch in visited:
+                continue
+            
+            # Remove larger characters from the end of the stack if:
+            # 1. Current character is smaller (gives a lexicographically smaller answer).
+            # 2. The top character appears again later, so it can be added back.
+            while st and st[-1] > ch and count[st[-1]] > 0:
+                visited.remove(st.pop())
+            
+            st.append(ch)
+            visited.add(ch)
+
+        return "".join(st)
