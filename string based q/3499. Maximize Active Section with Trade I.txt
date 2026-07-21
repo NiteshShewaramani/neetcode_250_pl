@@ -1,0 +1,39 @@
+class Solution:
+    # Time Complexity: O(n)
+    # Space Complexity: O(1)
+    def maxActiveSectionsAfterTrade(self, s: str) -> int:
+        n = len(s)
+
+        # Length of the previous zero block.
+        # Initialize with negative infinity so that the first zero block
+        # cannot incorrectly form a pair.
+        prevZero = float("-inf")
+
+        bestgain = 0
+        i =0
+        ones = 0 
+
+        while i < n:
+
+            # Find the end of the current block
+            j=i+1
+            while j<n and s[i]==s[j]:
+                j+=1
+            # Length of current consecutive block
+            length = j-i
+            if s[i]=='1':
+                
+                ones += length
+            else:
+                # Current block is a zero block.
+                #
+                # If there exists a previous zero block,
+                # then the 1-block between them can be removed,
+                # merging both zero blocks.
+
+                bestgain = max(bestgain , prevZero + length)
+                prevZero=length
+            i=j
+
+        # Original ones + maximum additional ones obtainable
+        return ones + bestgain
