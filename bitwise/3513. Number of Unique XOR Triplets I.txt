@@ -1,0 +1,13 @@
+class Solution:
+    # time O(1)
+    # space O(1)
+    def uniqueXorTriplets(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        if n<=2:
+            return n
+
+        #If n >= 3, every value in the range [0, 2^k - 1] can be formed, 
+        #where 2^k is the smallest power of two strictly greater than n. 
+        #Thus the number of distinct XOR values is exactly that power of two.
+        return 1 << n.bit_length()
