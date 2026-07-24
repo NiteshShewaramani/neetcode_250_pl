@@ -1,0 +1,31 @@
+class Solution:
+   
+    """
+    time O (N x N)
+    Space O(1) =>
+    The pair XOR set contains at most 2048 values.
+    The answer set also contains at most 2048 values.
+    """
+    def uniqueXorTriplets(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        if n==1:
+            return 1
+
+        xorset = set()
+        for i in range(n):
+            for j in range(i+1,n):
+                xorset.add(nums[i] ^ nums[j])
+
+        triplets = set()
+        for v in xorset:
+            for num in nums:
+                triplets.add(v ^ num)
+                triplets.add(num)
+
+        for num in nums:
+            triplets.add(num)
+
+        return len(triplets)
+
+        
