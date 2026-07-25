@@ -1,0 +1,21 @@
+class Solution:
+    # time O(9 x 9) - max we can have 9 digits due to input constraint
+    # space O(9) - max we can have 9 digits due to input constraint
+    def maxProduct(self, n: int) -> int:
+        digits = []
+
+        while n>=1:
+            
+            remainder = n %  10
+            digits.append(remainder)
+            n = n // 10
+            
+        
+        maxpro = 0 
+
+        for i in range(len(digits)):
+            for j in range(i+1 , len(digits)):
+                
+                maxpro = max(maxpro , digits[i] * digits[j])
+
+        return maxpro 
