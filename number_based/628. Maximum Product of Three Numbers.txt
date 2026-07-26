@@ -1,0 +1,15 @@
+class Solution:
+    #time O(NlogN) 
+    #SPace O(1)
+    def maximumProduct(self, nums: List[int]) -> int:
+        nums.sort()
+        maxPro = float("-inf")
+        start1 = nums[0]
+        start2 = nums[1]
+        start3 = nums[-3]
+        start4 = nums[-2]
+        start5 = nums[-1]
+
+        maxPro = max(maxPro , start3 *start4 * start5 )
+        maxPro = max(maxPro ,  start1 * start2 * start5)
+        return maxPro
