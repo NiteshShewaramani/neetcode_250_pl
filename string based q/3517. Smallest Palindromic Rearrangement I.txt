@@ -1,0 +1,29 @@
+class Solution:
+    """
+    Time Complexity
+Let n be the length of the string.
+Counting frequencies: O(n)
+Loop over 26 letters: O(26) = O(1)
+Building the answer (left half + reverse): O(n)
+Overall Time Complexity: O(n)
+
+Space Complexity: O(1)
+    """
+    def smallestPalindrome(self, s: str) -> str:
+        freq = Counter(s)
+
+        left = []
+        middle = ""
+
+        for i in range(26):
+            ch = chr(ord('a') + i)
+
+            left.append(ch * (freq[ch] // 2))
+
+            if freq[ch] % 2:
+                middle = ch
+
+        left = "".join(left)
+
+        return left + middle + left[::-1]
+        
