@@ -1,0 +1,65 @@
+from collections import Counter
+
+#Time Complexity: O(n)
+
+#Space Complexity: O(n)
+class Solution:
+    LIMIT = 10 ** 6 + 1
+
+    def smallestPalindrome(self, s: str, k: int) -> str:
+        cnt = Counter(s)
+
+        half = [0] * 26
+        mid = ""
+
+        for ch, f in cnt.items():
+            half[ord(ch) - 97] = f // 2
+            if f & 1:
+                mid = ch
+
+        if self.countWays(half) < k:
+            return ""
+
+        left = []
+        m = sum(half)
+
+        for _ in range(m):
+            for i in range(26):
+                if half[i] == 0:
+                    continue
+
+                half[i] -= 1
+                ways = self.countWays(half)
+
+                if ways >= k:
+                    left.append(chr(i + 97))
+                    break
+
+                k -= ways
+                half[i] += 1
+
+        left = "".join(left)
+        return left + mid + left[::-1]
+
+    def countWays(self, cnt):
+        total = sum(cnt)
+        ans = 1
+
+        for f in cnt:
+            ans *= self.nCr(total, f)
+            if ans >= self.LIMIT:
+                return self.LIMIT
+            total -= f
+
+        return ans
+
+    def nCr(self, n, r):
+        r = min(r, n - r)
+        res = 1
+
+        for i in range(1, r + 1):
+            res = res * (n - i + 1) // i
+            if res >= self.LIMIT:
+                return self.LIMIT
+
+        return res
