@@ -1,0 +1,18 @@
+class Solution:
+    #space O(1) time O(1)
+    def minimumPushes(self, word: str) -> int:
+        n = len(word)
+        total = 0
+        if n <= 8:
+            return n
+        elif n > 8 and n<=16:
+            return 8 + (n-8)*2
+        elif n>16 and n<=24: #17 - 8 + 9*2
+            twoMultiple = min((n-8) * 2 , 16) 
+            return 8 + twoMultiple + (n-16)*3
+        else:
+            twoMultiple = min((n-8) * 2 , 16) 
+            threeMultiple =  min((n-8) * 3 , 24) 
+            return 8 + twoMultiple + threeMultiple + (n-24)*4
+
+        
