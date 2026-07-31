@@ -1,0 +1,12 @@
+class Solution:
+    #time O(N) Space O(1) , only 26 unique letters
+    def minimumPushes(self, word: str) -> int:
+        #sort based on values in descending order
+        freqList = sorted(Counter(word).values() , reverse=True)
+        
+
+        ans = 0
+        for index , freq in enumerate(freqList):
+            ans = ans + (index //8 + 1) * freq
+
+        return ans
