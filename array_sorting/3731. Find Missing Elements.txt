@@ -1,0 +1,16 @@
+class Solution:
+    #time O(NlogN + D) space O(N)
+    def findMissingElements(self, nums: List[int]) -> List[int]:
+        ans = []
+        nums.sort()
+
+        j=1
+        while j < len(nums):
+            prev = nums[j-1]
+            cur  = nums[j]
+            while prev+1 < cur:
+                prev=prev+1
+                ans.append(prev)
+            j=j+1
+
+        return ans 
