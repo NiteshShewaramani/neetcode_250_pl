@@ -1,0 +1,35 @@
+class Solution:
+    # This runs in O(n + m) time and O(n + m) space, where m = len(invocations)
+    def remainingMethods(self, n: int, k: int, invocations: List[List[int]]) -> List[int]:
+        graph = [[] for _ in range(n)]
+        undirected = [[] for _ in range(n)]
+
+        for u, v in invocations:
+            graph[u].append(v)
+            undirected[u].append(v)
+            undirected[v].append(u)
+
+        suspicious = [False] * n
+
+        def dfs(u: int):
+            suspicious[u] = True
+            for v in graph[u]:
+                if not suspicious[v]:
+                    dfs(v)
+
+        dfs(k)
+
+        vis = [False] * n
+
+        def dfs2(u: int):
+            vis[u] = True
+            suspicious[u] = False
+            for v in undirected[u]:
+                if not vis[v]:
+                    dfs2(v)
+
+        for i in range(n):
+            if not suspicious[i] and not vis[i]:
+                dfs2(i)
+
+        return [i for i in range(n) if not suspicious[i]]
