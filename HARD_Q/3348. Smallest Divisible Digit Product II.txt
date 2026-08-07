@@ -1,0 +1,102 @@
+from collections import Counter
+
+FACTOR = {
+    0: Counter(),
+    1: Counter(),
+    2: Counter({2: 1}),
+    3: Counter({3: 1}),
+    4: Counter({2: 2}),
+    5: Counter({5: 1}),
+    6: Counter({2: 1, 3: 1}),
+    7: Counter({7: 1}),
+    8: Counter({2: 3}),
+    9: Counter({3: 2}),
+}
+
+
+class Solution:
+    def smallestNumber(self, num: str, t: int) -> str:
+        need = Counter()
+        x = t
+        for p in (2, 3, 5, 7):
+            while x % p == 0:
+                x //= p
+                need[p] += 1
+        if x != 1:
+            return "-1"
+
+        def compress(cnt: Counter) -> Counter:
+            c2 = cnt[2]
+            c3 = cnt[3]
+            c5 = cnt[5]
+            c7 = cnt[7]
+
+            res = Counter()
+
+            res[8] = c2 // 3
+            c2 %= 3
+
+            res[9] = c3 // 2
+            c3 %= 2
+
+            res[4] = c2 // 2
+            c2 %= 2
+
+            if c2 and c3:
+                res[6] = 1
+                c2 = c3 = 0
+
+            if c3 and res[4]:
+                res[4] -= 1
+                res[6] += 1
+                res[2] += 1
+                c3 = 0
+
+            res[2] += c2
+            res[3] += c3
+            res[5] = c5
+            res[7] = c7
+            return res
+
+        def build(fc: Counter) -> str:
+            s = []
+            for d in range(2, 10):
+                s.append(str(d) * fc[d])
+            return "".join(s)
+
+        fc = compress(need)
+        if sum(fc.values()) > len(num):
+            return build(fc)
+
+        pref = Counter()
+        for ch in num:
+            pref += FACTOR[int(ch)]
+
+        first_zero = num.find("0")
+        if first_zero == -1:
+            first_zero = len(num)
+            ok = True
+            for p in (2, 3, 5, 7):
+                if pref[p] < need[p]:
+                    ok = False
+                    break
+            if ok:
+                return num
+
+        for i in range(len(num) - 1, -1, -1):
+            d = int(num[i])
+            pref -= FACTOR[d]
+            space = len(num) - 1 - i
+            if i > first_zero:
+                continue
+            for nd in range(d + 1, 10):
+                rem = Counter()
+                for p in (2, 3, 5, 7):
+                    rem[p] = max(0, need[p] - pref[p] - FACTOR[nd][p])
+                f = compress(rem)
+                if sum(f.values()) <= space:
+                    ones = space - sum(f.values())
+                    return num[:i] + str(nd) + "1" * ones + build(f)
+
+        fc = compress(need)
+        return "1" * (len(num) + 1 - sum(fc.values())) + build(fc)
