@@ -1,0 +1,93 @@
+class SegmentTree:
+    def __init__(self, s):
+        self.n = len(s)
+        size = 4 * self.n
+
+        self.left = [''] * size
+        self.right = [''] * size
+        self.pref = [0] * size
+        self.suff = [0] * size
+        self.best = [0] * size
+        self.length = [0] * size
+
+        self.build(1, 0, self.n - 1, s)
+
+    def build(self, node, l, r, s):
+        if l == r:
+            self.left[node] = self.right[node] = s[l]
+            self.pref[node] = self.suff[node] = self.best[node] = 1
+            self.length[node] = 1
+            return
+
+        mid = (l + r) // 2
+        self.build(node * 2, l, mid, s)
+        self.build(node * 2 + 1, mid + 1, r, s)
+
+        self.pull(node)
+
+    def pull(self, node):
+        a = node * 2
+        b = node * 2 + 1
+
+        self.left[node] = self.left[a]
+        self.right[node] = self.right[b]
+        self.length[node] = self.length[a] + self.length[b]
+
+        self.pref[node] = self.pref[a]
+        self.suff[node] = self.suff[b]
+        self.best[node] = max(self.best[a], self.best[b])
+
+        if self.right[a] == self.left[b]:
+            # Join suffix of left segment and prefix of right segment.
+            self.best[node] = max(
+                self.best[node],
+                self.suff[a] + self.pref[b]
+            )
+
+            # Entire left segment has the same character.
+            if self.pref[a] == self.length[a]:
+                self.pref[node] = self.length[a] + self.pref[b]
+
+            # Entire right segment has the same character.
+            if self.suff[b] == self.length[b]:
+                self.suff[node] = self.length[b] + self.suff[a]
+
+    def update(self, node, l, r, pos, ch):
+        if l == r:
+            self.left[node] = self.right[node] = ch
+            self.pref[node] = self.suff[node] = self.best[node] = 1
+            return
+
+        mid = (l + r) // 2
+
+        if pos <= mid:
+            self.update(node * 2, l, mid, pos, ch)
+        else:
+            self.update(node * 2 + 1, mid + 1, r, pos, ch)
+
+        self.pull(node)
+
+    def change(self, pos, ch):
+        self.update(1, 0, self.n - 1, pos, ch)
+
+    def query(self):
+        return self.best[1]
+
+
+
+# Building the tree: O(n)
+# Each character update: O(log n)
+# Each answer: O(1) after the update
+# Total: O(n + q log n)
+# Space: O(n)
+
+class Solution:
+    def longestRepeating(self, s: str, queryCharacters: str, queryIndices: list[int]) -> list[int]:
+        tree = SegmentTree(s)
+        ans = []
+
+        for ch, idx in zip(queryCharacters, queryIndices):
+            tree.change(idx, ch)
+            ans.append(tree.query())
+
+        return ans
