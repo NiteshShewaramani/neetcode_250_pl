@@ -1,0 +1,89 @@
+class Solution:
+    #Time: O(n x n) Space: O(n²)
+    #
+    def stoneGameV(self, stoneValue: List[int]) -> int:
+        n = len(stoneValue)
+
+        # dp[i][j] = answer for interval [i, j]
+        dp = [[0] * n for _ in range(n)]
+
+        # mx[i][j] stores:
+        #
+        #   max(dp[i][k] + sum(i..k)) for k <= j
+        #
+        # and, symmetrically,
+        #
+        #   mx[j][i] stores max(dp[k][j] + sum(k..j))
+        #
+        mx = [[0] * n for _ in range(n)]
+
+        for i in range(n):
+            mx[i][i] = stoneValue[i]
+
+        # Fix the right endpoint.
+        for j in range(1, n):
+
+            # mid is the boundary between the two possible cases.
+            mid = j
+
+            # Sum of the current interval [i, j]
+            total = stoneValue[j]
+
+            # Sum of the suffix currently assigned to the right side.
+            right = 0
+
+            # Move i from right to left.
+            for i in range(j - 1, -1, -1):
+                total += stoneValue[i]
+
+                # Move mid left while the right part is
+                # still <= the left part.
+                #
+                # After this loop:
+                #   right = sum(mid+1 ... j)
+                # and
+                #   sum(i ... mid) >= right
+                while mid > i and (right + stoneValue[mid]) * 2 <= total:
+                    right += stoneValue[mid]
+                    mid -= 1
+
+                # Case 1: the two sides are exactly equal.
+                if right * 2 == total:
+                    dp[i][j] = mx[i][mid]
+
+                # Case 2: left side is strictly smaller.
+                #
+                # Valid split points are before mid.
+                if mid != i:
+                    dp[i][j] = max(
+                        dp[i][j],
+                        mx[i][mid - 1]
+                    )
+
+                # Case 3: right side is strictly smaller.
+                #
+                # The optimal boundary split is mid.
+                if mid != j:
+                    dp[i][j] = max(
+                        dp[i][j],
+                        mx[j][mid + 1]
+                    )
+
+                # Update auxiliary values for future intervals.
+                #
+                # Left:
+                # dp[i][j] + sum(i..j)
+                mx[i][j] = max(
+                    mx[i][j - 1],
+                    dp[i][j] + total
+                )
+
+                # Right:
+                # dp[i][j] + sum(i..j)
+                mx[j][i] = max(
+                    mx[j][i + 1],
+                    dp[i][j] + total
+                )
+
+        return dp[0][n - 1]
+        
