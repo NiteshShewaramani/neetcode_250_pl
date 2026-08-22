@@ -1,0 +1,17 @@
+class Solution:
+# Time Olog(N) Space O(1)
+    def checkDivisibility(self, n: int) -> bool:
+        cursum = 0
+        curpro = 1
+        originalv = n
+        while n >= 1:
+            r = n % 10
+            cursum = cursum + int(r)
+            curpro *= int(r)
+            n = n / 10
+
+        
+        result = originalv % (cursum + curpro)
+        if result == 0:
+            return True
+        return False
