@@ -1,0 +1,12 @@
+class Solution:
+    #time O(N) Space O(N)
+    def missingMultiple(self, nums: List[int], k: int) -> int:
+
+        seen = set(nums)
+        res = k
+
+        while res in seen:
+            res=res+k
+
+        
+        return res
