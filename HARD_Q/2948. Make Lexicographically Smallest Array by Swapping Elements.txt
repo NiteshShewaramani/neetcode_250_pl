@@ -1,0 +1,41 @@
+class Solution:
+#     Time Complexity: O(N⋅logN)
+
+# Sorting nums takes O(N⋅logN) time. Iterating through each element in sortedNums and updating our two maps takes O(N) time. Iterating through nums to overwrite its values with the sorted list values in each group takes a total of O(N) time. Thus, the total time complexity is O(N⋅logN).
+
+# Space Complexity: O(N+S 
+# N
+# ​
+#  )≈O(N)
+
+# Both our maps have a space complexity of N. The space complexity used for sorting nums depends on the language of implementation:
+    def lexicographicallySmallestArray(self, nums, limit):
+        nums_sorted = sorted(nums)
+
+        curr_group = 0
+        num_to_group = {}
+        num_to_group[nums_sorted[0]] = curr_group
+
+        group_to_list = {}
+        group_to_list[curr_group] = deque([nums_sorted[0]])
+
+        for i in range(1, len(nums)):
+            if abs(nums_sorted[i] - nums_sorted[i - 1]) > limit:
+                # new group
+                curr_group += 1
+
+            # assign current element to group
+            num_to_group[nums_sorted[i]] = curr_group
+
+            # add element to sorted group deque
+            if curr_group not in group_to_list:
+                group_to_list[curr_group] = deque()
+            group_to_list[curr_group].append(nums_sorted[i])
+
+        # iterate through input and overwrite each element with the next element in its corresponding group
+        for i in range(len(nums)):
+            num = nums[i]
+            group = num_to_group[num]
+            nums[i] = group_to_list[group].popleft()
+
+        return nums
