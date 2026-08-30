@@ -1,0 +1,32 @@
+class Solution:
+    #time O(n) space O(1)
+    def minimumDeletions(self, nums: List[int]) -> int:
+        minIndex = nums.index(min(nums))
+        maxIndex = nums.index(max(nums))
+        no_of_elements = len(nums)
+        # minIndex = 0
+        # maxIndex = 0
+        # minNo = 10000000
+        # maxNo = -10000000
+
+        # for i in range(0,no_of_elements):
+        #     if nums[i] < minNo:
+        #         minNo=nums[i]
+        #         minIndex=i
+        #     if nums[i]>maxNo:
+        #         maxNo=nums[i]
+        #         maxindex=i
+
+
+        l =  min(minIndex , maxIndex)
+        r =  max(minIndex , maxIndex)
+        #delete from front 
+        scenario1 = r + 1
+        #delete from back
+        scenario2 = no_of_elements - l
+        #scenario3 delete from both front and back
+        scenario3 = l + 1 + no_of_elements -r
+ 
+         
+        return min(scenario1 , scenario2 , scenario3)
+
