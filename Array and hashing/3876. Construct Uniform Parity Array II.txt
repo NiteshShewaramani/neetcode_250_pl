@@ -1,0 +1,17 @@
+class Solution:
+    #time O(N) space O(1)
+    def uniformArray(self, nums1: list[int]) -> bool:
+        min_value = nums1[0]
+        hasOdd = False
+
+        for n in nums1:
+            if n%2==1:
+                hasOdd = True
+
+            min_value = min(n , min_value)
+
+        #always true if minimum value in odd
+        if min_value % 2 == 1:
+            return True
+
+        return not hasOdd
