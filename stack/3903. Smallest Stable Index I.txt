@@ -1,0 +1,34 @@
+class Solution:
+    #time O(N) Space O(N)
+    def firstStableIndex(self, nums: list[int], k: int) -> int:
+        maxNo = nums[0]
+        increasingsequence = []
+        n = len(nums) - 1
+        increasingsequence.append(n)
+
+        for i in range(n-1,-1,-1):
+            topIndex = increasingsequence[-1]
+            if nums[i] < nums[topIndex]:
+                 increasingsequence.append(i)
+
+        for i in range(0,n+1):
+            if nums[i] > maxNo:
+                maxNo = nums[i]
+
+            topIndex = increasingsequence[-1]
+
+            while topIndex < i:
+                increasingsequence.pop()
+                topIndex = increasingsequence[-1]
+
+            minNo = nums[topIndex]
+            score = maxNo - minNo
+            if score <= k:
+                return i
+
+        return -1
+
+
+
+
+        
