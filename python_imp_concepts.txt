@@ -1,0 +1,71 @@
+class Solution:
+    def checkOverlap(self, radius: int, xCenter: int, yCenter: int, x1: int, y1: int, x2: int, y2: int) -> bool:
+
+        arr = [1,2,3]
+        maxInt = float("inf")
+        minInt = float("-inf")
+
+        print(arr[0])
+        print(arr[-1])
+
+        arr.sort()
+        arr.reverse()
+
+        arr.append(7)
+        arr.append(8)
+        #using list as stack
+        arr.pop()
+
+        for i in range(len(arr)):
+            print(i , arr[i])
+
+        
+        arr2d = [[0] * 4 for i in range(4) ] # 2D list 
+
+        queue = deque()
+
+        queue.append(1)
+        queue.append(2)
+        queue.append(3)
+        queue.append(4)
+
+        queue.popleft() #pop from left
+        queue.pop() #pop from right
+
+        myMap = {"alice" : 12 ,"bob":21}
+        myMap["joy"] = 15
+
+        for key in myMap:
+            print(key , myMap[key])
+
+        
+        mySet = set()
+        mySet.add(1)
+        mySet.add(2)
+        mySet.add(3)
+
+        if 2 in mySet:
+            print(True)
+        elif 4 in mySet:
+            print(True)
+        else:
+            print(False)
+
+
+        
+        myheap = []
+
+        heapq.heappush(myheap,4)
+        heapq.heappush(myheap,1)
+        heapq.heappush(myheap,8)
+        heapq.heappush(myheap,96)
+
+        print(myheap[0]) #top  of heap 
+
+        heapq.heapify(arr)
+
+
+        
+        return True
+
+        
