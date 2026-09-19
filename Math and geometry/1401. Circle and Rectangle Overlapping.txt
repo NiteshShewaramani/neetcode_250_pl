@@ -1,0 +1,50 @@
+class Solution:
+    #time O(1) space O(1)
+    def checkOverlap(self, radius: int, xCenter: int, yCenter: int, x1: int, y1: int, x2: int, y2: int) -> bool:
+
+        
+        def distance(ux , uy , vx, vy):
+            #distance between 2 points (x1-x2) ^ 2 + (y1-y2) ^ 2
+            return (ux-vx)**2 + (uy-vy)**2
+
+        
+        #center of circle is inside the rectangle
+        if x1 <= xCenter <= x2 and y1 <= yCenter <= y2:
+            return True
+
+        #center of circle is above the rectangle
+        if x1<= xCenter <= x2 and y2 <= yCenter <= y2 + radius:
+            return True
+
+        
+        #center of circle is below the rectangle
+        if x1 <=  xCenter <= x2 and y1 - radius <= yCenter <= y1:
+            return True
+
+        #circle is on the left
+        if x1-radius <= xCenter <= x1 and y1<= yCenter <= y2:
+            return True
+
+        #circle is on the right
+        if x2 <= xCenter <= x2+radius and y1 <= yCenter <= y2:
+            return True
+
+        #lower left corner of rect
+        if distance(xCenter , yCenter , x1,y1) <= radius**2:
+            return True
+
+        #upper left corner of rect
+        if distance(xCenter , yCenter , x1,y2) <= radius**2:
+            return True
+
+        #upper right corner of rect
+        if distance(xCenter , yCenter , x2,y2) <= radius**2:
+            return True
+
+        #lower right corner of rect
+        if distance(xCenter , yCenter , x2,y1) <= radius**2:
+            return True
+
+
+        #no intersection
+        return False
