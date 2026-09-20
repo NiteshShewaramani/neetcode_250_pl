@@ -1,0 +1,12 @@
+class Solution:
+    #time O(N) space O(1)
+    def reverseDegree(self, s: str) -> int:
+        ans=0
+
+        for i in range(len(s)):
+            org_ascii_v = 26 - (ord(s[i]) - 97)
+            ans = ans + (i+1)*org_ascii_v
+
+
+
+        return ans
