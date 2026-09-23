@@ -1,0 +1,27 @@
+class Solution:
+    #Time O(N) Space O(1)
+    def minOperations(self, nums: list[int], x: int) -> int:
+        k = sum(nums) - x
+
+        #not possible to find 
+        if k < 0:
+            return -1 
+        
+        left = 0
+        currentSum = 0
+        best = -1
+        #we are finding maximum size subarray sum equals k
+
+        for right in range(len(nums)):
+            currentSum = currentSum + nums[right]
+
+            #skrinking the window 
+            while currentSum > k:
+                currentSum = currentSum - nums[left]
+                left = left + 1 
+
+            if currentSum == k:
+                best = max(best , right - left + 1)
+            
+
+        return -1 if best < 0 else len(nums) - best
