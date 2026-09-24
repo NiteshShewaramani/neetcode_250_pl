@@ -1,0 +1,22 @@
+class Solution:
+    #Time O(N x d) where d is the no of digits and N is len of nums
+    def smallestIndex(self, nums: List[int]) -> int:
+
+        def sumOfDigits(n):
+            res = 0
+            while n >= 1:
+                res = res + n %10
+                n = n // 10
+            
+            return res
+
+        i=0
+        for n in nums:
+            res = sumOfDigits(n)
+            if i == res:
+                return i
+            
+            i=i+1
+
+        
+        return -1
